@@ -15,7 +15,7 @@
   display: block;
   margin-bottom: 0.4rem;
   font-size: 0.85rem;
-  color: #a0a0b0;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -27,6 +27,6 @@
 
 .arrow {
   font-size: 1.5rem;
-  color: #7f5af0;
+  color: var(--color-accent);
   padding-top: 1.2rem;
 }
