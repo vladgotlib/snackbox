@@ -155,12 +155,6 @@ h1 {
   text-decoration: none;
 }
 
-.card__desc {
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-  font-weight: 400;
-  margin-left: 0.5rem;
-}
 
 /* === App page shared === */
 .app-container {
