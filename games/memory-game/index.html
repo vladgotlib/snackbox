@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Game — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../index.html" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="game-container">
+    <div class="settings-bar">
+      <div class="settings-controls">
+        <div class="setting">
+          <label for="theme-select">Theme</label>
+          <select id="theme-select">
+            <option value="animals">Animals</option>
+            <option value="food">Food</option>
+            <option value="sports">Sports</option>
+            <option value="objects">Objects</option>
+          </select>
+        </div>
+        <div class="setting">
+          <label for="rows-input">Rows</label>
+          <input type="number" id="rows-input" min="3" max="7" value="4">
+        </div>
+        <div class="setting">
+          <label for="cols-input">Cols</label>
+          <input type="number" id="cols-input" min="3" max="7" value="4">
+        </div>
+        <button id="restart-btn" class="icon-btn" aria-label="Restart game">&#128260;</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-label">Moves</span>
+        <span id="move-counter" class="stat-value">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Time</span>
+        <span id="timer" class="stat-value">0:00</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Rating</span>
+        <span id="star-rating" class="stat-value">&#9733;&#9733;&#9733;</span>
+      </div>
+    </div>
+
+    <div id="game-board" class="game-board"></div>
+  </div>
+
+  <div id="win-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>You Win!</h2>
+      <div class="modal-stats">
+        <p>Moves: <strong id="modal-moves">0</strong></p>
+        <p>Time: <strong id="modal-time">0:00</strong></p>
+        <p>Rating: <strong id="modal-stars">&#9733;&#9733;&#9733;</strong></p>
+      </div>
+      <button id="play-again-btn" class="btn-primary">Play Again</button>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
