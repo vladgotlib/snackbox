@@ -22,14 +22,6 @@ Stack absurd ingredients on a wobbling sandwich tower with simple physics. How t
 - Score = number of ingredients stacked before collapse
 - "Screenshot Your Creation" button using canvas capture; ingredient name list shown alongside
 
-### Type the Color, Not the Word
-Stroop test as a speed game. Words spell color names in mismatched ink. You must type the INK color, not the word. 60-second blitz.
-- Display a color word (e.g., "BLUE") rendered in a different ink color (e.g., red)
-- Player types the name of the INK color, not the word itself
-- Correct answer immediately shows next word; wrong answer flashes and adds a 2-second penalty
-- 60-second countdown timer; score = correct answers
-- Combo multiplier for streaks; brain-vs-brain tension increases with speed
-
 ### Gravity Doodle
 Draw lines and ramps on a canvas, then drop a ball that bounces off your drawings with real physics. Guide it to the target zone.
 - Freehand drawing tool on a canvas element
