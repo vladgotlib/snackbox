@@ -34,6 +34,21 @@
   var statWrongEl    = document.getElementById('stat-wrong');
   var statBestCombo  = document.getElementById('stat-best-combo');
 
+  // ── Hint panel ────────────────────────────────────────
+  var hintToggle = document.getElementById('hint-toggle');
+  var hintPanel  = document.getElementById('hint-panel');
+
+  COLORS.forEach(function (c) {
+    var span = document.createElement('span');
+    span.textContent = c.name;
+    span.style.color = c.hex;
+    hintPanel.appendChild(span);
+  });
+
+  hintToggle.addEventListener('click', function () {
+    hintPanel.classList.toggle('hidden');
+  });
+
   // ── Game state ────────────────────────────────────────
   var score, combo, bestCombo, correctCount, wrongCount;
   var timeLeft, timerInterval;
