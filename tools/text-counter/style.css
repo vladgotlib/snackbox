@@ -1,0 +1,34 @@
+textarea {
+  resize: vertical;
+  margin-bottom: 1.5rem;
+  font-family: inherit;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.stat {
+  background: #16213e;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  border: 1px solid #2a2a4a;
+  min-width: 100px;
+}
+
+.stat__value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #7f5af0;
+}
+
+.stat__label {
+  display: block;
+  font-size: 0.8rem;
+  color: #a0a0b0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

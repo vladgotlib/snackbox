@@ -1,0 +1,24 @@
+.score {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #7f5af0;
+}
+
+#click-btn {
+  font-size: 1.5rem;
+  padding: 1rem 3rem;
+  margin-bottom: 1rem;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid #2a2a4a;
+  color: #a0a0b0;
+}
+
+.btn-secondary:hover {
+  background: #16213e;
+  border-color: #7f5af0;
+  color: #e0e0e0;
+}
