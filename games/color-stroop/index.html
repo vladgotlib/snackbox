@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Type the Color — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../index.html" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Type the Color</h1>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+      <p class="instructions">A color word will appear in a <strong>different ink color</strong>.<br>Type the <strong>ink color</strong>, not the word!</p>
+      <div class="color-preview">
+        <span style="color: #e53e3e; font-size: 2.5rem; font-weight: 800;">BLUE</span>
+        <span class="preview-arrow">→ type "red"</span>
+      </div>
+      <button id="start-btn">Start</button>
+    </div>
+
+    <!-- Countdown Overlay -->
+    <div id="countdown-screen" class="hidden">
+      <span id="countdown-number" class="countdown-number">3</span>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="hidden">
+      <div class="timer-bar">
+        <div id="timer-fill" class="timer-fill"></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-label">Time</span>
+          <span id="timer-display" class="stat-value">60</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span id="score-display" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Combo</span>
+          <span id="combo-display" class="stat-value">x1</span>
+        </div>
+      </div>
+      <div id="color-word" class="color-word">BLUE</div>
+      <input type="text" id="color-input" class="color-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="type the ink color...">
+      <div id="feedback" class="feedback"></div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="hidden">
+      <h2 class="gameover-title">Time's Up!</h2>
+      <div class="final-score-display">
+        <span class="final-score-label">Final Score</span>
+        <span id="final-score" class="final-score-value">0</span>
+      </div>
+      <div class="gameover-stats">
+        <div class="gameover-stat">
+          <span class="stat-label">Correct</span>
+          <span id="stat-correct" class="stat-value correct-color">0</span>
+        </div>
+        <div class="gameover-stat">
+          <span class="stat-label">Wrong</span>
+          <span id="stat-wrong" class="stat-value wrong-color">0</span>
+        </div>
+        <div class="gameover-stat">
+          <span class="stat-label">Best Combo</span>
+          <span id="stat-best-combo" class="stat-value">0</span>
+        </div>
+      </div>
+      <button id="play-again-btn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
