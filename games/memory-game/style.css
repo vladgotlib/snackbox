@@ -176,7 +176,7 @@
   background: var(--color-bg-secondary);
   border: 2px solid var(--color-border);
   box-shadow: 0 2px 6px var(--color-card-shadow);
-  font-size: clamp(1.4rem, 5vw, 2.4rem);
+  font-size: clamp(2rem, 10vw, 4rem);
   user-select: none;
 }
 
@@ -303,7 +303,7 @@
   }
 
   .mc-card-back {
-    font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+    font-size: clamp(1.6rem, 8vw, 3rem);
   }
 
   .modal {
