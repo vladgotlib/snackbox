@@ -127,15 +127,44 @@ function updateEstimate() {
   const estimatedCallTime = intercept + slope * yourNumber;
   const now = Date.now();
   const waitMs = Math.max(0, estimatedCallTime - now);
-  const waitMin = Math.round(waitMs / 60000);
 
   messageEl.classList.add('hidden');
   estimateEl.classList.remove('hidden');
 
-  waitTimeEl.textContent = '~' + waitMin + ' min';
+  waitTimeEl.textContent = '~' + formatDuration(waitMs);
   callTimeEl.textContent = '~' + formatTime(estimatedCallTime);
   aheadEl.textContent = numbersAhead;
   rateEl.textContent = '~' + minPerNumber.toFixed(1);
+}
+
+function formatDuration(ms) {
+  var totalSec = Math.round(ms / 1000);
+  var totalMin = Math.floor(totalSec / 60);
+  var sec = totalSec % 60;
+  var hours = Math.floor(totalMin / 60);
+  var min = totalMin % 60;
+
+  if (hours >= 2) {
+    // Round minutes to nearest 15
+    var q = Math.round(min / 15) * 15;
+    if (q === 60) { hours++; q = 0; }
+    return q === 0 ? hours + ' hr' : hours + ' hr ' + q + ' min';
+  }
+  if (hours === 1) {
+    // Round minutes to nearest 5
+    var r = Math.round(min / 5) * 5;
+    if (r === 60) return '2 hr';
+    return r === 0 ? '1 hr' : '1 hr ' + r + ' min';
+  }
+  if (totalMin >= 10) {
+    // Just minutes, no seconds
+    return totalMin + ' min';
+  }
+  if (totalMin >= 1) {
+    // Minutes and seconds
+    return totalMin + ' min ' + sec + ' sec';
+  }
+  return totalSec + ' sec';
 }
 
 function formatTime(ts) {
