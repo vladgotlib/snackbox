@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Wait Estimator — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Queue Wait Estimator</h1>
+
+    <div class="input-group">
+      <label for="your-number">Your Number</label>
+      <input type="number" id="your-number" placeholder="e.g. 45" inputmode="numeric">
+    </div>
+
+    <div class="input-group">
+      <label for="now-serving">Now Serving</label>
+      <div class="input-row">
+        <input type="number" id="now-serving" placeholder="e.g. 32" inputmode="numeric">
+        <button id="add-btn">Add</button>
+      </div>
+    </div>
+
+    <div id="estimate" class="estimate hidden">
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__value" id="wait-time">—</span>
+          <span class="stat__label">Est. Wait</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="call-time">—</span>
+          <span class="stat__label">Called At</span>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__value" id="ahead">—</span>
+          <span class="stat__label">Ahead of You</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="rate">—</span>
+          <span class="stat__label">Min / Number</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="message" class="message">Log at least 2 observations to see an estimate.</div>
+
+    <div id="observations-section" class="observations-section hidden">
+      <h2>Observations</h2>
+      <ul id="observations-list" class="observations-list"></ul>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
