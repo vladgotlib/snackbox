@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bouncer — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Bouncer</h1>
+
+    <!-- Start Screen -->
+    <div id="start-screen">
+      <p class="instructions">Control your paddle with the mouse to bounce the falling puck.<br>Collect stars for points. Don't let the puck fall!</p>
+      <button id="start-btn">Start</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="hidden">
+      <div class="stats-row">
+        <div class="stat-box">
+          <span class="stat-label">Score</span>
+          <span id="score-display" class="stat-value">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Lives</span>
+          <span id="lives-display" class="stat-value">&#9679;&#9679;&#9679;&#9679;&#9679;</span>
+        </div>
+      </div>
+      <canvas id="game-canvas" width="500" height="600"></canvas>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="hidden">
+      <h2 class="gameover-title">Game Over</h2>
+      <div class="final-score-display">
+        <span class="final-score-label">Final Score</span>
+        <span id="final-score" class="final-score-value">0</span>
+      </div>
+      <button id="play-again-btn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

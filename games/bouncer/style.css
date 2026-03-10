@@ -1,0 +1,101 @@
+/* ── Screens ─────────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+/* ── Start Screen ────────────────────────────────────── */
+.instructions {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+#start-btn {
+  font-size: 1.3rem;
+  padding: 0.8rem 3rem;
+}
+
+/* ── Stats Row ───────────────────────────────────────── */
+.stats-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* ── Canvas ──────────────────────────────────────────── */
+#game-canvas {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: none;
+}
+
+/* ── Game Over Screen ────────────────────────────────── */
+.gameover-title {
+  font-size: 1.8rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.final-score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.final-score-value {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.final-score-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+#play-again-btn {
+  font-size: 1.1rem;
+  padding: 0.7rem 2.5rem;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 480px) {
+  .stats-row {
+    gap: 1.2rem;
+  }
+
+  .final-score-value {
+    font-size: 2.5rem;
+  }
+}
