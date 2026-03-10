@@ -79,25 +79,24 @@
       starts.push(sx);
     }
 
+    // Base speed: all racers would finish at time T if not for a small offset.
+    // Farther back = higher speed (speed = distance / T).
+    // Winner gets exact T. Losers get a small penalty (arrive 5-30 frames late).
     racers = [];
     for (var i = 0; i < 3; i++) {
-      var dist = FINISH_X - starts[i];
+      var d = FINISH_X - starts[i];
       var speed;
       if (i === winnerIndex) {
-        speed = dist / T;
+        speed = d / T;
       } else {
-        // Losers arrive 5-30 frames late
         var delay = 5 + Math.random() * 25;
-        speed = dist / (T + delay);
+        speed = d / (T + delay);
       }
       racers.push({
         emoji: emojis[i],
         startX: starts[i],
         x: starts[i],
         speed: speed,
-        sinPhase: Math.random() * Math.PI * 2,
-        sinFreq: 0.03 + Math.random() * 0.02,
-        sinAmp: 0.3 + Math.random() * 0.3,
         finished: false
       });
     }
@@ -180,7 +179,12 @@
     ctx.textBaseline = 'middle';
     for (var i = 0; i < racers.length; i++) {
       var r = racers[i];
-      ctx.fillText(r.emoji, r.x, laneY(i));
+      // Flip emoji horizontally so it faces right
+      ctx.save();
+      ctx.translate(r.x, laneY(i));
+      ctx.scale(-1, 1);
+      ctx.fillText(r.emoji, 0, 0);
+      ctx.restore();
     }
   }
 
@@ -264,25 +268,15 @@
     }
 
     if (phase === 'racing') {
-      var anyRacing = false;
       for (var i = 0; i < racers.length; i++) {
         var r = racers[i];
         if (r.finished) continue;
 
-        // Progress ratio (0 to 1)
-        var progress = (r.x - r.startX) / (FINISH_X - r.startX);
-        progress = Math.max(0, Math.min(1, progress));
-
-        // Sinusoidal variation dampens near finish
-        var dampen = 1 - progress * progress;
-        var sin = Math.sin(frameCount * r.sinFreq + r.sinPhase) * r.sinAmp * dampen;
-        r.x += r.speed + sin;
+        r.x += r.speed;
 
         if (r.x >= FINISH_X) {
           r.x = FINISH_X;
           r.finished = true;
-        } else {
-          anyRacing = true;
         }
       }
 
