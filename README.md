@@ -4,16 +4,11 @@ A lightweight collection of web games, small tools, and calculators. No framewor
 
 ## What's Inside
 
-**Games**
-- **Click Counter** — Click the button as fast as you can
-- **Memory Game** — Match pairs of emoji cards before time runs out
-- **Type the Color** — Stroop test: type the ink color, not the word
+**Games** — Quick, casual browser games: reflex tests, puzzles, arcade-style challenges.
 
-**Tools**
-- **Text Counter** — Count characters, words, and lines in any text
+**Tools** — Small, single-purpose utilities for everyday tasks like text manipulation and estimation.
 
-**Calculators**
-- **Unit Converter** — Convert between kilometers and miles
+**Calculators** — Fun and practical calculators for unit conversion, odds, and quick math.
 
 ## Run Locally
 
