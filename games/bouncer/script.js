@@ -5,9 +5,9 @@
   var GRAVITY = 0.15;
   var WALL_DAMPING = 0.8;
   var PUCK_R = 12;
-  var PADDLE_R = 30;
+  var PADDLE_R = 40;
   var MIN_BOUNCE_SPEED = 8;
-  var MAX_PUCK_SPEED = 12;
+  var MAX_PUCK_SPEED = 20;
   var STAR_COUNT = 5;
   var STAR_POINTS = 10;
   var STARTING_LIVES = 5;
@@ -33,6 +33,7 @@
   // ── Game state ───────────────────────────────────────
   var score, lives, puck, paddle, stars, animId, gameActive;
   var prevPaddle = { x: 0, y: 0 };
+  var collisionCooldown = 0;
 
   function resetPuck() {
     return {
@@ -118,68 +119,65 @@
         return;
       }
       puck = resetPuck();
+      collisionCooldown = 0;
     }
   }
 
   // ── Paddle collision ─────────────────────────────────
   function checkPaddleCollision() {
     var minDist = PUCK_R + PADDLE_R;
-    var dx = paddle.x - prevPaddle.x;
-    var dy = paddle.y - prevPaddle.y;
 
-    // Swept circle-circle test: find first t in [0,1] where
-    // the paddle (moving from prevPaddle to paddle) touches the puck.
-    // This prevents tunneling and computes the correct impact normal
-    // even when the paddle moves fast and overshoots the puck.
-    var fx = prevPaddle.x - puck.x;
-    var fy = prevPaddle.y - puck.y;
+    // Collision normal from current paddle position (consistent reference frame)
+    var nd = dist(puck.x, puck.y, paddle.x, paddle.y);
+    var overlap = minDist - nd;
 
-    var a = dx * dx + dy * dy;
-    var b = 2 * (fx * dx + fy * dy);
-    var c = fx * fx + fy * fy - minDist * minDist;
-
-    var hitT = -1;
-
-    if (a > 0.0001) {
-      var disc = b * b - 4 * a * c;
-      if (disc >= 0) {
-        var sqrtDisc = Math.sqrt(disc);
-        var t1 = (-b - sqrtDisc) / (2 * a);
-        if (t1 >= 0 && t1 <= 1) hitT = t1;
-        else if (c < 0) hitT = 0; // already overlapping at frame start
-      }
-    } else if (c < 0) {
-      hitT = 0; // paddle barely moved but overlapping
+    // No overlap at all — nothing to do
+    if (overlap <= 0) {
+      if (collisionCooldown > 0) collisionCooldown--;
+      return;
     }
 
-    if (hitT < 0) return;
-
-    // Paddle position at moment of first contact
-    var impX = prevPaddle.x + dx * hitT;
-    var impY = prevPaddle.y + dy * hitT;
-
-    // Collision normal (from paddle impact position toward puck)
-    var nd = dist(puck.x, puck.y, impX, impY);
+    // Compute normal (paddle center → puck)
     var nx, ny;
     if (nd < 0.001) {
       nx = 0; ny = -1; // degenerate: push puck upward
     } else {
-      nx = (puck.x - impX) / nd;
-      ny = (puck.y - impY) / nd;
+      nx = (puck.x - paddle.x) / nd;
+      ny = (puck.y - paddle.y) / nd;
     }
 
-    // Separate puck from current paddle position along the impact normal
-    puck.x = paddle.x + nx * (minDist + 1);
-    puck.y = paddle.y + ny * (minDist + 1);
+    // Paddle velocity this frame
+    var dx = paddle.x - prevPaddle.x;
+    var dy = paddle.y - prevPaddle.y;
 
     // Relative velocity (puck relative to paddle)
     var rvx = puck.vx - dx;
     var rvy = puck.vy - dy;
     var dotN = rvx * nx + rvy * ny;
 
-    // dotN < 0 → approaching (normal hit or puck catching retreating paddle)
-    // dotN >= 0 → already separating in relative frame, just push out
-    if (dotN >= 0) return;
+    // Already separating — only do passive push-out if deeply overlapping
+    if (dotN >= 0) {
+      if (overlap > 1) {
+        puck.x += nx * overlap;
+        puck.y += ny * overlap;
+      }
+      if (collisionCooldown > 0) collisionCooldown--;
+      return;
+    }
+
+    // During cooldown, only push out — no bounce
+    if (collisionCooldown > 0) {
+      puck.x += nx * (overlap + 1);
+      puck.y += ny * (overlap + 1);
+      collisionCooldown--;
+      return;
+    }
+
+    // ── Bounce ──
+
+    // Separate puck from paddle along normal
+    puck.x = paddle.x + nx * (minDist + 1);
+    puck.y = paddle.y + ny * (minDist + 1);
 
     // Reflect relative velocity along normal
     rvx -= 2 * dotN * nx;
@@ -200,6 +198,9 @@
     var clamped = clampSpeed(puck.vx, puck.vy);
     puck.vx = clamped.vx;
     puck.vy = clamped.vy;
+
+    // Set cooldown to prevent re-collision for 3 frames
+    collisionCooldown = 3;
   }
 
   // ── Star collision ───────────────────────────────────
@@ -323,6 +324,7 @@
     prevPaddle.x = paddle.x;
     prevPaddle.y = paddle.y;
     stars = initStars();
+    collisionCooldown = 0;
     gameActive = true;
     frameCount = 0;
 
