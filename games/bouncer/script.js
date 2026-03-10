@@ -1,7 +1,7 @@
 (function () {
   // ── Constants ────────────────────────────────────────
-  var CANVAS_W = 500;
-  var CANVAS_H = 600;
+  var CANVAS_W = 700;
+  var CANVAS_H = 800;
   var GRAVITY = 0.15;
   var WALL_DAMPING = 0.8;
   var PUCK_R = 12;
@@ -32,6 +32,7 @@
 
   // ── Game state ───────────────────────────────────────
   var score, lives, puck, paddle, stars, animId, gameActive;
+  var prevPaddle = { x: 0, y: 0 };
 
   function resetPuck() {
     return {
@@ -122,29 +123,83 @@
 
   // ── Paddle collision ─────────────────────────────────
   function checkPaddleCollision() {
-    var d = dist(puck.x, puck.y, paddle.x, paddle.y);
     var minDist = PUCK_R + PADDLE_R;
-    if (d < minDist && d > 0) {
-      // Normal from paddle center to puck
-      var nx = (puck.x - paddle.x) / d;
-      var ny = (puck.y - paddle.y) / d;
+    var dx = paddle.x - prevPaddle.x;
+    var dy = paddle.y - prevPaddle.y;
 
-      // Separate
-      puck.x = paddle.x + nx * minDist;
-      puck.y = paddle.y + ny * minDist;
+    // Swept circle-circle test: find first t in [0,1] where
+    // the paddle (moving from prevPaddle to paddle) touches the puck.
+    // This prevents tunneling and computes the correct impact normal
+    // even when the paddle moves fast and overshoots the puck.
+    var fx = prevPaddle.x - puck.x;
+    var fy = prevPaddle.y - puck.y;
 
-      // Current speed
-      var spd = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
-      var outSpeed = Math.max(spd, MIN_BOUNCE_SPEED);
+    var a = dx * dx + dy * dy;
+    var b = 2 * (fx * dx + fy * dy);
+    var c = fx * fx + fy * fy - minDist * minDist;
 
-      // Bounce along normal
-      puck.vx = nx * outSpeed;
-      puck.vy = ny * outSpeed;
+    var hitT = -1;
 
-      var clamped = clampSpeed(puck.vx, puck.vy);
-      puck.vx = clamped.vx;
-      puck.vy = clamped.vy;
+    if (a > 0.0001) {
+      var disc = b * b - 4 * a * c;
+      if (disc >= 0) {
+        var sqrtDisc = Math.sqrt(disc);
+        var t1 = (-b - sqrtDisc) / (2 * a);
+        if (t1 >= 0 && t1 <= 1) hitT = t1;
+        else if (c < 0) hitT = 0; // already overlapping at frame start
+      }
+    } else if (c < 0) {
+      hitT = 0; // paddle barely moved but overlapping
     }
+
+    if (hitT < 0) return;
+
+    // Paddle position at moment of first contact
+    var impX = prevPaddle.x + dx * hitT;
+    var impY = prevPaddle.y + dy * hitT;
+
+    // Collision normal (from paddle impact position toward puck)
+    var nd = dist(puck.x, puck.y, impX, impY);
+    var nx, ny;
+    if (nd < 0.001) {
+      nx = 0; ny = -1; // degenerate: push puck upward
+    } else {
+      nx = (puck.x - impX) / nd;
+      ny = (puck.y - impY) / nd;
+    }
+
+    // Separate puck from current paddle position along the impact normal
+    puck.x = paddle.x + nx * (minDist + 1);
+    puck.y = paddle.y + ny * (minDist + 1);
+
+    // Relative velocity (puck relative to paddle)
+    var rvx = puck.vx - dx;
+    var rvy = puck.vy - dy;
+    var dotN = rvx * nx + rvy * ny;
+
+    // dotN < 0 → approaching (normal hit or puck catching retreating paddle)
+    // dotN >= 0 → already separating in relative frame, just push out
+    if (dotN >= 0) return;
+
+    // Reflect relative velocity along normal
+    rvx -= 2 * dotN * nx;
+    rvy -= 2 * dotN * ny;
+
+    // Convert back to world frame with partial paddle velocity transfer
+    puck.vx = rvx + dx * 0.6;
+    puck.vy = rvy + dy * 0.6;
+
+    // Enforce minimum outgoing speed
+    var spd = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
+    if (spd < MIN_BOUNCE_SPEED) {
+      var s = MIN_BOUNCE_SPEED / (spd || 1);
+      puck.vx *= s;
+      puck.vy *= s;
+    }
+
+    var clamped = clampSpeed(puck.vx, puck.vy);
+    puck.vx = clamped.vx;
+    puck.vy = clamped.vy;
   }
 
   // ── Star collision ───────────────────────────────────
@@ -218,6 +273,8 @@
     checkPaddleCollision();
     checkStarCollisions();
     render();
+    prevPaddle.x = paddle.x;
+    prevPaddle.y = paddle.y;
     animId = requestAnimationFrame(loop);
   }
 
@@ -263,6 +320,8 @@
     lives = STARTING_LIVES;
     puck = resetPuck();
     paddle = { x: CANVAS_W / 2, y: CANVAS_H - 60 };
+    prevPaddle.x = paddle.x;
+    prevPaddle.y = paddle.y;
     stars = initStars();
     gameActive = true;
     frameCount = 0;
