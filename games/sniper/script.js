@@ -18,20 +18,21 @@
   var INNER_R       = 100;
   var MIDDLE_R      = 114;
   var OUTER_R       = 128;
-  var SHIP_R        = 142;
+  var SHIP_R        = 160;
   var ARC_THICKNESS = 10;
   var BULLET_SPEED  = 6;
   var SHIP_SPEED    = 0.04;          // radians per frame
   var DEG           = Math.PI / 180;
 
-  /* Speed sets: [inner CW, middle CCW, outer CW, gapDeg] */
-  var LEVELS = [
-    [1, 1, 2, 24],
-    [2, 1, 3, 22],
-    [2, 3, 1, 20],
-    [3, 2, 4, 18],
-    [4, 3, 5, 16]
+  /* Difficulty ranges by level: [minSpeed, maxSpeed, minGap, maxGap] */
+  var DIFFICULTY = [
+    [0.5, 1.5, 38, 50],    // level 1: slow, wide gaps
+    [1.0, 2.5, 32, 44],    // level 2
+    [1.5, 3.5, 28, 38],    // level 3
+    [2.0, 4.5, 24, 34],    // level 4
+    [2.5, 5.5, 20, 30]     // level 5+: fast, tight gaps
   ];
+  var MIN_GAP = 18;  // absolute minimum gap in degrees
 
   /* ── DPR scaling ────────────────────────────────────── */
   var dpr = window.devicePixelRatio || 1;
@@ -45,10 +46,10 @@
   }
 
   /* ── Game state ─────────────────────────────────────── */
-  var score, lives, level, levelCfg;
+  var score, lives, level;
   var shipAngle;         // radians
   var bullet;            // { r, angle } or null
-  var arcs;              // [ { angle (deg), speed (deg/frame), dir (1|-1) } x3 ]
+  var arcs;              // [ { angle (deg), speed (deg/frame), dir (1|-1), gap (deg) } x3 ]
   var particles;         // [ { x,y,vx,vy,life,color } ]
   var rafId;
   var keys = {};
@@ -61,15 +62,14 @@
     return a;
   }
 
+  function randRange(min, max) {
+    return min + Math.random() * (max - min);
+  }
+
   function livesString(n) {
     var s = '';
     for (var i = 0; i < n; i++) s += '\u25CF';
     return s;
-  }
-
-  function getLevelCfg(lv) {
-    var idx = Math.min(lv - 1, LEVELS.length - 1);
-    return LEVELS[idx];
   }
 
   /* ── Init / reset ───────────────────────────────────── */
@@ -80,17 +80,27 @@
     shipAngle = -Math.PI / 2;   // top
     bullet = null;
     particles = [];
-    setupLevel();
+    randomizeArcs();
     updateHUD();
   }
 
-  function setupLevel() {
-    levelCfg = getLevelCfg(level);
-    arcs = [
-      { angle: 0, speed: levelCfg[0], dir:  1 },   // inner, CW
-      { angle: 0, speed: levelCfg[1], dir: -1 },   // middle, CCW
-      { angle: 0, speed: levelCfg[2], dir:  1 }    // outer, CW
-    ];
+  function randomizeArcs() {
+    var idx = Math.min(level - 1, DIFFICULTY.length - 1);
+    var d = DIFFICULTY[idx];
+    var dirs = [1, -1, 1];
+    arcs = [];
+    for (var i = 0; i < 3; i++) {
+      var speed = randRange(d[0], d[1]);
+      // randomize direction too
+      var dir = Math.random() < 0.5 ? 1 : -1;
+      var gap = Math.max(MIN_GAP, randRange(d[2], d[3]));
+      arcs.push({
+        angle: Math.random() * 360,   // random starting position
+        speed: speed,
+        dir: dir,
+        gap: gap
+      });
+    }
   }
 
   function updateHUD() {
@@ -141,12 +151,12 @@
       /* Check collision with arcs (outer → inner) */
       var arcRadii = [OUTER_R, MIDDLE_R, INNER_R];
       var arcOrder = [2, 1, 0];  // indices into arcs[] — outer, middle, inner
-      var gapDeg   = levelCfg[3];
 
       for (var i = 0; i < 3; i++) {
         if (bullet.cleared[i]) continue;
         var r  = arcRadii[i];
         var ai = arcOrder[i];
+        var gapDeg = arcs[ai].gap;
         /* Bullet crossed this arc this frame? (prevR was outside, now inside or past) */
         if (prevR >= r - ARC_THICKNESS / 2 && bullet.r <= r + ARC_THICKNESS / 2) {
           var bulletDeg = ((bullet.angle / DEG) % 360 + 360) % 360;
@@ -174,8 +184,8 @@
         score++;
         if (score % 5 === 0) {
           level++;
-          setupLevel();
         }
+        randomizeArcs();
         updateHUD();
       }
     }
@@ -218,11 +228,10 @@
 
     /* Arcs */
     var radii = [INNER_R, MIDDLE_R, OUTER_R];
-    var gapDeg = levelCfg[3];
-    var gapRad = gapDeg * DEG;
 
     for (var i = 0; i < 3; i++) {
       var r = radii[i];
+      var gapRad = arcs[i].gap * DEG;
       var gapCenterRad = arcs[i].angle * DEG;
       var startA = gapCenterRad + gapRad / 2;
       var endA   = gapCenterRad - gapRad / 2 + Math.PI * 2;
