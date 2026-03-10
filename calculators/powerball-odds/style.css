@@ -1,0 +1,134 @@
+.visualizer-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.visualizer-container h1 {
+  margin-bottom: 0.5rem;
+}
+
+.explanation {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Stats bar */
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.stat__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+/* Grid */
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  user-select: none;
+}
+
+.cell {
+  width: 14px;
+  height: 14px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.cell:hover {
+  border-color: var(--color-accent);
+}
+
+.cell.selected {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.cell.winner {
+  background: #facc15;
+  border-color: #eab308;
+}
+
+.cell.wrong {
+  background: #ef4444;
+  border-color: #dc2626;
+}
+
+/* Controls */
+.controls {
+  margin-bottom: 1rem;
+}
+
+/* Result */
+.result-message {
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-height: 1.6em;
+  margin-bottom: 1rem;
+}
+
+.result-message.win {
+  color: #facc15;
+}
+
+.result-message.lose {
+  color: var(--color-text-secondary);
+}
+
+/* Footnote */
+.footnote {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .cell {
+    width: 12px;
+    height: 12px;
+  }
+
+  .stats-bar {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .cell {
+    width: 10px;
+    height: 10px;
+  }
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Powerball Odds Visualizer — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="visualizer-container">
+    <h1>Powerball Odds Visualizer</h1>
+    <p class="explanation">The odds of winning the Powerball jackpot are <strong>1 in 292,201,338</strong>. Below are 1,207 squares. Pick 3 — if all 3 match the hidden winning squares, you win. The odds are about the same as winning Powerball.</p>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat__label">Odds</span>
+        <span class="stat__value">~1 in 292 million</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Attempts</span>
+        <span class="stat__value" id="attempts">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat__label">Picks</span>
+        <span class="stat__value" id="picks">0 / 3</span>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="controls">
+      <button id="reset-btn">Reset</button>
+    </div>
+
+    <p class="result-message" id="result"></p>
+
+    <p class="footnote">C(1207, 3) = 1207 × 1206 × 1205 / 6 = 292,341,435 — a 99.95% match to real Powerball odds.</p>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
