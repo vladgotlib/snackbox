@@ -4,7 +4,7 @@
   var CANVAS_H = 400;
   var TOTAL_ROUNDS = 5;
   var LANE_H = 100;
-  var LANE_TOP = 50; // top margin for lanes
+  var LANE_TOP = 80; // top margin for lanes
   var FINISH_X = CANVAS_W - 60;
   var FINISH_COL_W = 20;
   var EMOJI_SIZE = 40;
@@ -225,11 +225,11 @@
     if (phase !== 'countdown') return;
     var sec = Math.ceil(phaseTimer / 60);
     var text = sec > 0 ? '' + sec : 'GO!';
-    ctx.font = 'bold 60px sans-serif';
+    ctx.font = 'bold 48px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = getColor('--color-accent');
-    ctx.fillText(text, CANVAS_W / 2, CANVAS_H / 2);
+    ctx.fillText(text, CANVAS_W / 2, LANE_TOP / 2);
   }
 
   function drawResultText() {
@@ -245,11 +245,11 @@
       text = 'Wrong!';
       color = '#ef4444';
     }
-    ctx.font = 'bold 44px sans-serif';
+    ctx.font = 'bold 36px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = color;
-    ctx.fillText(text, CANVAS_W / 2, CANVAS_H / 2);
+    ctx.fillText(text, CANVAS_W / 2, LANE_TOP / 2);
   }
 
   var lastAwardedPoints = 0;
