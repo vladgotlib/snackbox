@@ -31,7 +31,7 @@
   ctx.scale(dpr, dpr);
 
   // ── Game state ───────────────────────────────────────
-  var score, round, racers, winnerIndex, playerPick;
+  var score, round, racers, winnerIndex, playerPick, pickTime;
   var phase; // 'countdown', 'racing', 'result', 'done'
   var phaseTimer, roundStartTime, animId;
   var frameCount;
@@ -60,6 +60,7 @@
     var emojis = shuffle(EMOJI_POOL).slice(0, 3);
     winnerIndex = Math.floor(Math.random() * 3);
     playerPick = -1;
+    pickTime = 0;
 
     // Target race duration: 4-6 seconds (in frames at 60fps)
     var T = (4 + Math.random() * 2) * 60;
@@ -109,7 +110,7 @@
 
   // ── Scoring ──────────────────────────────────────────
   function calcPoints() {
-    var elapsed = (performance.now() - roundStartTime) / 1000;
+    var elapsed = (pickTime - roundStartTime) / 1000;
     return Math.max(10, Math.floor(100 - 10 * elapsed));
   }
 
@@ -129,12 +130,12 @@
   }
 
   function handlePick(clientX, clientY) {
-    if (playerPick !== -1) return; // already picked
     if (phase !== 'countdown' && phase !== 'racing') return;
     var cy = getCanvasY(clientX, clientY);
     var lane = getLaneFromY(cy);
     if (lane === -1) return;
     playerPick = lane;
+    pickTime = performance.now();
   }
 
   canvas.addEventListener('click', function (e) {
