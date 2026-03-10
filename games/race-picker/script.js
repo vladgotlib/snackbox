@@ -1,6 +1,6 @@
 (function () {
   // ── Constants ────────────────────────────────────────
-  var CANVAS_W = 700;
+  var CANVAS_W = 900;
   var CANVAS_H = 400;
   var TOTAL_ROUNDS = 5;
   var LANE_H = 100;
@@ -192,12 +192,24 @@
     if (playerPick === -1) return;
     var top = LANE_TOP + playerPick * LANE_H;
     var correct = playerPick === winnerIndex;
+    var color;
     if (phase === 'result') {
-      ctx.fillStyle = correct ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)';
+      color = correct ? '#22c55e' : '#ef4444';
     } else {
-      ctx.fillStyle = 'rgba(59,130,246,0.15)';
+      color = '#3b82f6';
     }
-    ctx.fillRect(0, top, CANVAS_W, LANE_H);
+    // Draw a bold border around the picked lane
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(2, top + 2, CANVAS_W - 4, LANE_H - 4);
+    // Draw a small arrow indicator on the left
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(8, top + LANE_H / 2 - 10);
+    ctx.lineTo(20, top + LANE_H / 2);
+    ctx.lineTo(8, top + LANE_H / 2 + 10);
+    ctx.closePath();
+    ctx.fill();
   }
 
   function drawWinnerHighlight() {
