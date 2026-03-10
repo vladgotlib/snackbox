@@ -129,7 +129,7 @@ h1 {
 .card {
   background: var(--color-bg-secondary);
   border-radius: 8px;
-  padding: 0.75rem 1rem;
+  padding: 0;
   transition: transform 0.15s, box-shadow 0.15s;
   border: 1px solid var(--color-border);
 }
@@ -146,6 +146,7 @@ h1 {
 
 .card a {
   display: block;
+  padding: 0.75rem 1rem;
   color: var(--color-text);
   font-weight: 600;
   font-size: 1.1rem;
