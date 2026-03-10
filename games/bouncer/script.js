@@ -11,6 +11,7 @@
   var STAR_COUNT = 5;
   var STAR_POINTS = 10;
   var STARTING_LIVES = 5;
+  var TOUCH_Y_OFFSET = 60;
 
   // ── DOM refs ─────────────────────────────────────────
   var startScreen = document.getElementById('start-screen');
@@ -34,6 +35,7 @@
   var score, lives, puck, paddle, stars, animId, gameActive;
   var prevPaddle = { x: 0, y: 0 };
   var collisionCooldown = 0;
+  var isTouch = false;
 
   function resetPuck() {
     return {
@@ -300,19 +302,21 @@
   canvas.addEventListener('touchmove', function (e) {
     if (!gameActive) return;
     e.preventDefault();
+    isTouch = true;
     var t = e.touches[0];
     var c = getCanvasCoords(t.clientX, t.clientY);
     paddle.x = c.x;
-    paddle.y = c.y;
+    paddle.y = Math.max(PADDLE_R, c.y - TOUCH_Y_OFFSET);
   }, { passive: false });
 
   canvas.addEventListener('touchstart', function (e) {
     if (!gameActive) return;
     e.preventDefault();
+    isTouch = true;
     var t = e.touches[0];
     var c = getCanvasCoords(t.clientX, t.clientY);
     paddle.x = c.x;
-    paddle.y = c.y;
+    paddle.y = Math.max(PADDLE_R, c.y - TOUCH_Y_OFFSET);
   }, { passive: false });
 
   // ── Game flow ────────────────────────────────────────
