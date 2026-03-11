@@ -26,11 +26,11 @@
 
   /* Difficulty ranges by level: [minSpeed, maxSpeed, minGap, maxGap] */
   var DIFFICULTY = [
-    [0.5, 1.5, 38, 50],    // level 1: slow, wide gaps
-    [1.0, 2.5, 32, 44],    // level 2
-    [1.5, 3.5, 28, 38],    // level 3
-    [2.0, 4.5, 24, 34],    // level 4
-    [2.5, 5.5, 20, 30]     // level 5+: fast, tight gaps
+    [0.3, 0.8, 38, 50],    // level 1: slow, wide gaps
+    [0.5, 1.2, 32, 44],    // level 2
+    [0.7, 1.6, 28, 38],    // level 3
+    [0.9, 2.0, 24, 34],    // level 4
+    [1.0, 2.4, 20, 30]     // level 5+: moderate, tight gaps
   ];
   var MIN_GAP = 18;  // absolute minimum gap in degrees
 
