@@ -210,7 +210,7 @@
   }
 
   // ── Input ────────────────────────────────────────────
-  canvas.addEventListener('click', function () {
+  canvas.addEventListener('mousedown', function () {
     dropBlock();
   });
 
