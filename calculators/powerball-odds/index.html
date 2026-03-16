@@ -45,6 +45,38 @@
     <p class="result-message" id="result"></p>
 
     <p class="footnote">C(1207, 3) = 1207 × 1206 × 1205 / 6 = 292,341,435 — a 99.95% match to real Powerball odds.</p>
+
+    <div class="path-section">
+      <h2>Pixel Path Challenge</h2>
+      <p class="explanation">Starting from the green cell, trace a path with your mouse. At each step you have 8 possible directions. Matching 10 consecutive moves to a hidden random path is about <strong>1 in 1 billion</strong> — in the ballpark of Powerball odds.</p>
+
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat__label">Moves</span>
+          <span class="stat__value" id="path-moves">0 / 10</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Matches</span>
+          <span class="stat__value" id="path-matches">—</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Attempts</span>
+          <span class="stat__value" id="path-attempts">0</span>
+        </div>
+      </div>
+
+      <div class="path-canvas-wrapper">
+        <canvas id="path-canvas" width="588" height="588"></canvas>
+      </div>
+
+      <div class="controls">
+        <button id="path-reset-btn">New Path</button>
+      </div>
+
+      <p class="result-message" id="path-result"></p>
+
+      <p class="footnote">8<sup>x</sup> = 292,201,338 → x ≈ 9.37 moves. We round up to 10 (8<sup>10</sup> = 1,073,741,824 ≈ 1 in 1 billion) for a clean visualization.</p>
+    </div>
   </div>
 
   <script src="../../shared/theme.js"></script>
