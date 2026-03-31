@@ -175,25 +175,6 @@ h1 {
 
 .card__title { display: block; }
 
-.card__desc {
-  display: block;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-  margin-top: 0;
-  transition: max-height 0.3s ease, opacity 0.25s ease 0.05s, margin-top 0.3s ease;
-}
-
-.card:hover .card__desc {
-  max-height: 3.5rem;
-  opacity: 1;
-  margin-top: 0.35rem;
-}
-
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -201,7 +182,7 @@ h1 {
 
 @media (prefers-reduced-motion: reduce) {
   .card, .section { animation: none; }
-  .card__desc, .card { transition: none; }
+  .card { transition: none; }
 }
 
 
