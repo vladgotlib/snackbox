@@ -79,33 +79,31 @@
       return;
     }
 
-    // Perfect placement check (>= 98% of previous width)
+    // Perfect placement — snap and skip cut-off pieces
     if (overlapWidth >= top.width * 0.98) {
       overlapWidth = top.width;
       overlapLeft = top.x;
-    }
-
-    // Cut-off piece falls away
-    var cutLeft = cur.x;
-    var cutRight = cur.x + cur.width;
-    if (overlapLeft > cutLeft) {
-      // Left side was cut
-      var leftCutWidth = overlapLeft - cutLeft;
-      if (leftCutWidth > 1) {
-        fallingPieces.push({
-          x: cutLeft, y: cur.y, width: leftCutWidth,
-          vy: 0, color: blockColor(score), alpha: 1
-        });
+    } else {
+      // Cut-off pieces only when not a perfect placement
+      var cutLeft = cur.x;
+      var cutRight = cur.x + cur.width;
+      if (overlapLeft > cutLeft) {
+        var leftCutWidth = overlapLeft - cutLeft;
+        if (leftCutWidth > 1) {
+          fallingPieces.push({
+            x: cutLeft, y: cur.y, width: leftCutWidth,
+            vy: 0, color: blockColor(score), alpha: 1
+          });
+        }
       }
-    }
-    if (overlapRight < cutRight) {
-      // Right side was cut
-      var rightCutWidth = cutRight - overlapRight;
-      if (rightCutWidth > 1) {
-        fallingPieces.push({
-          x: overlapRight, y: cur.y, width: rightCutWidth,
-          vy: 0, color: blockColor(score), alpha: 1
-        });
+      if (overlapRight < cutRight) {
+        var rightCutWidth = cutRight - overlapRight;
+        if (rightCutWidth > 1) {
+          fallingPieces.push({
+            x: overlapRight, y: cur.y, width: rightCutWidth,
+            vy: 0, color: blockColor(score), alpha: 1
+          });
+        }
       }
     }
 
