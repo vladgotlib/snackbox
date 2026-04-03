@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Crimson+Text:ital@0;1&display=swap');
+
+/* Force dark mystical theme regardless of theme toggle */
+body {
+    background: #0a0a0a !important;
+    color: #e0d5c7;
+    font-family: 'Crimson Text', serif;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.app-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px);
+}
+
+/* Animated background stars */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+.container {
+    text-align: center;
+    z-index: 10;
+    max-width: 600px;
+    padding: 20px;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 3em;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    color: #c9a961;
+    text-shadow: 0 0 20px rgba(201, 169, 97, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(201, 169, 97, 0.5); }
+    to { text-shadow: 0 0 30px rgba(201, 169, 97, 0.8), 0 0 40px rgba(201, 169, 97, 0.4); }
+}
+
+.instructions {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.ritual-text {
+    font-style: italic;
+    color: #c9a961;
+    margin: 1em 0;
+    font-size: 1.1em;
+}
+
+#mysticalInput {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid #c9a961;
+    border-radius: 10px;
+    padding: 15px 25px;
+    font-size: 1.1em;
+    color: #e0d5c7;
+    width: 100%;
+    max-width: 400px;
+    margin: 2em auto;
+    text-align: center;
+    font-family: 'Crimson Text', serif;
+    transition: all 0.3s;
+}
+
+#mysticalInput:focus {
+    outline: none;
+    box-shadow: 0 0 30px rgba(201, 169, 97, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.button {
+    background: linear-gradient(135deg, #c9a961 0%, #8b6914 100%);
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-family: 'Cinzel', serif;
+    color: #0a0a0a;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1em;
+    box-shadow: 0 5px 20px rgba(201, 169, 97, 0.3);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201, 169, 97, 0.5);
+}
+
+.oracle-chamber {
+    display: none;
+    margin-top: 3em;
+}
+
+.crystal-ball {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2em;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent 40%),
+                radial-gradient(circle, #1a0033, #000);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.5),
+                inset 0 0 50px rgba(138, 43, 226, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.mist {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.4), transparent);
+    animation: swirl 5s linear infinite;
+}
+
+@keyframes swirl {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.revelation {
+    display: none;
+    font-size: 2em;
+    font-family: 'Cinzel', serif;
+    color: #c9a961;
+    text-shadow: 0 0 30px rgba(201, 169, 97, 0.8);
+    margin-top: 2em;
+    animation: fadeInGlow 2s ease-in;
+}
+
+@keyframes fadeInGlow {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.hidden-answer {
+    position: absolute;
+    left: -9999px;
+}
+
+#resetButton {
+    display: none;
+    margin-top: 2em;
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+}
