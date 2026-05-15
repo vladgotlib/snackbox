@@ -60,7 +60,7 @@
     dots.push({ id: i, x: x, y: y, format: format, audience: audience, topic: topic, specificity: rand(), style: rand() });
   }
 
-  const active = new Set();
+  const active = new Set(['format']);
   const dotGroup = document.getElementById('dof-dotgroup');
   const padL = 14, padR = 14, padT = 14, padB = 14;
   const VW = 600, VH = 260;
@@ -153,8 +153,9 @@
     b.addEventListener('click', function() {
       active.clear();
       const p = b.dataset.preset;
-      if (p === 'vague') active.add('format');
-      else if (p === 'medium') { active.add('format'); active.add('audience'); active.add('topic'); }
+      if (p === 'none') active.add('format');
+      else if (p === 'vague') { active.add('format'); active.add('audience'); }
+      else if (p === 'medium') { active.add('format'); active.add('audience'); active.add('topic'); active.add('tone'); }
       else if (p === 'tight') CONSTRAINTS.forEach(function(c){ active.add(c.id); });
       render();
     });
