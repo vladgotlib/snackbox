@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Constraints — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Prompt Constraints</h1>
+
+    <div class="dof-prompt">
+      <span class="dof-prompt-base">Write</span><span id="dof-prompt-add"></span><span class="dof-prompt-base">.</span>
+    </div>
+
+    <div class="dof-presets">
+      <span>Try:</span>
+      <button class="dof-preset-btn" data-preset="none">Unconstrained</button>
+      <button class="dof-preset-btn" data-preset="vague">A little</button>
+      <button class="dof-preset-btn" data-preset="medium">Medium</button>
+      <button class="dof-preset-btn" data-preset="tight">Tightly specified</button>
+    </div>
+
+    <div class="dof-chips" id="dof-chips"></div>
+
+    <div class="dof-space">
+      <div class="dof-plot-row">
+        <div class="dof-y-axis">
+          <span>longer</span>
+          <span>shorter</span>
+        </div>
+        <div class="dof-scatter-box">
+          <svg class="dof-scatter" id="dof-scatter" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g id="dof-dotgroup"></g>
+          </svg>
+        </div>
+      </div>
+      <div class="dof-x-axis">
+        <span>more casual</span>
+        <span>tone</span>
+        <span>more formal</span>
+      </div>
+      <div class="dof-legend" id="dof-legend"></div>
+    </div>
+
+    <div class="dof-stats">
+      <div class="dof-stat">
+        <div class="dof-stat-l">Possibility space</div>
+        <div class="dof-stat-v" id="dof-stat-pct">100%</div>
+      </div>
+      <div class="dof-stat">
+        <div class="dof-stat-l">Constraints applied</div>
+        <div class="dof-stat-v" id="dof-stat-n">0 / 7</div>
+      </div>
+      <div class="dof-stat">
+        <div class="dof-stat-l">Outputs narrowed by</div>
+        <div class="dof-stat-v" id="dof-stat-reduction">1&times;</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+.app-container {
+    max-width: 700px;
+}
+
+.dof-prompt {
+    font-family: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    background: var(--color-bg-secondary);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    min-height: 24px;
+}
+
+.dof-prompt-base {
+    color: var(--color-text-secondary);
+}
+
+.dof-prompt-chunk {
+    color: var(--color-accent);
+}
+
+.dof-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.dof-preset-btn {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 0.5px solid var(--color-border);
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.dof-preset-btn:hover {
+    background: var(--color-bg-secondary);
+    color: var(--color-text);
+}
+
+.dof-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.dof-chip {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 0.5px solid var(--color-border);
+    background: var(--color-bg);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+.dof-chip:hover {
+    background: var(--color-bg-secondary);
+}
+
+.dof-chip.is-active {
+    background: rgba(var(--color-accent-rgb, 99, 102, 241), 0.1);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.dof-space {
+    background: var(--color-bg-secondary);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    margin-bottom: 14px;
+}
+
+.dof-plot-row {
+    display: flex;
+    align-items: stretch;
+}
+
+.dof-y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    padding: 4px 8px 4px 0;
+    min-width: 48px;
+    text-align: right;
+}
+
+.dof-scatter-box {
+    flex: 1;
+    min-width: 0;
+}
+
+.dof-scatter {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.dof-x-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    padding: 4px 8px 0 56px;
+}
+
+.dof-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    margin-top: 12px;
+    padding: 0 8px 0 56px;
+}
+
+.dof-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.dof-legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.dof-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.dof-stat {
+    background: var(--color-bg-secondary);
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.dof-stat-l {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.dof-stat-v {
+    font-size: 22px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+.dof-dot {
+    transition: opacity 0.45s ease;
+}
