@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flip Tiles — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Flip Tiles</h1>
+
+    <main class="game">
+
+      <div class="board-col">
+        <div class="board-card">
+          <div class="board-slot" id="boardSlot">
+            <div id="board">
+              <div id="tileHolder"></div>
+              <div id="errorHolder"></div>
+            </div>
+            <div id="scrim"></div>
+          </div>
+        </div>
+
+        <div class="begin-slot">
+          <button id="beginNewLevel" type="button">Hover here to begin</button>
+        </div>
+      </div>
+
+      <aside class="hud">
+
+        <section class="hud-card">
+          <div class="card-head">
+            <h2>Level</h2>
+            <button id="btnNewGame" type="button">New game</button>
+          </div>
+
+          <div class="level-line">
+            <span class="n" id="tLevel">1</span>
+            <span class="of">of 10</span>
+          </div>
+          <div class="track"><i id="levelBar"></i></div>
+        </section>
+
+        <section class="hud-card">
+          <div class="card-head"><h2>This level</h2></div>
+
+          <dl class="stats">
+            <div class="stat">
+              <dt>Time</dt>
+              <dd id="tTime">0.000</dd>
+            </div>
+            <div class="stat">
+              <dt>Penalties <span class="tag">+3s each</span></dt>
+              <dd id="tPenalties">0</dd>
+            </div>
+            <div class="stat stat--key">
+              <dt>Current</dt>
+              <dd id="tCurrentScore">0.000</dd>
+            </div>
+            <div class="stat">
+              <dt>Total so far</dt>
+              <dd id="tTotalScore">0.000</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="hud-card">
+          <div class="best">
+            <span>Best on this computer</span>
+            <b id="tLowest">&mdash;</b>
+          </div>
+        </section>
+
+        <section class="hud-card howto">
+          <div class="card-head"><h2>How to play</h2></div>
+
+          <div class="swatches">
+            <span class="swatch"><i class="pale"></i>flip it</span>
+            <span class="swatch"><i class="solid"></i>done</span>
+            <span class="swatch"><i class="dark"></i>avoid</span>
+          </div>
+
+          <ul>
+            <li>Sweep the pointer over every <b>pale</b> tile to flip it.</li>
+            <li><b>Keep moving.</b> A tile is only safe while it spins &mdash; still
+                on it when it lands costs a penalty.</li>
+            <li>Touching a <b>black</b> tile costs a penalty too.</li>
+            <li>Your score is <b>seconds elapsed + 3 per penalty</b>, across all
+                10 levels. <b>Lowest wins.</b></li>
+          </ul>
+        </section>
+
+      </aside>
+    </main>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
