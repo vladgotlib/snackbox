@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Count Days — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Count Days</h1>
+
+    <form class="cd-controls" id="cd-form" autocomplete="off">
+      <div class="cd-field cd-field--label">
+        <label for="cd-what">Event name <span class="cd-optional">(optional)</span></label>
+        <input type="text" id="cd-what" maxlength="80" placeholder="Wedding, trip, deadline&hellip;">
+      </div>
+
+      <div class="cd-field">
+        <label for="cd-date">Date</label>
+        <input type="date" id="cd-date">
+      </div>
+
+      <div class="cd-field hidden" id="cd-end-field">
+        <label for="cd-end">End date</label>
+        <div class="cd-end-row">
+          <input type="date" id="cd-end">
+          <button type="button" class="cd-icon-btn" id="cd-end-remove" aria-label="Remove end date">&times;</button>
+        </div>
+      </div>
+
+      <div class="cd-actions">
+        <button type="button" class="cd-ghost-btn" id="cd-end-add">+ Add an end date</button>
+        <button type="button" class="cd-ghost-btn" id="cd-copy">Copy link</button>
+      </div>
+    </form>
+
+    <div class="cd-summary" id="cd-summary" aria-live="polite" aria-atomic="true">
+      <p class="cd-headline" id="cd-headline"></p>
+      <p class="cd-sub hidden" id="cd-sub"></p>
+      <div class="stats" id="cd-stats"></div>
+    </div>
+
+    <p class="cd-message hidden" id="cd-message" role="status"></p>
+
+    <div class="cd-empty" id="cd-empty">
+      <p>Pick a date above to see the days stack up &mdash; ahead of you, or behind.</p>
+      <div class="cd-presets">
+        <span>Try:</span>
+        <button type="button" class="cd-preset-btn" data-preset="newyear">New Year's Day</button>
+        <button type="button" class="cd-preset-btn" data-preset="plus30">+30 days</button>
+        <button type="button" class="cd-preset-btn" data-preset="plus365">+1 year</button>
+      </div>
+    </div>
+
+    <div class="cd-legend hidden" id="cd-legend"></div>
+
+    <div class="cd-wall" id="cd-wall" role="group" aria-label="Month calendars"></div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
