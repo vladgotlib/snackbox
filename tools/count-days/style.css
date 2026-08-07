@@ -250,11 +250,11 @@
 
 /* A lifetime-length wall is ~18k cells, and laying out that many flex +
    aspect-ratio boxes costs ~2.3s. Skipping layout for off-screen months takes
-   it to ~0.25s. 210px is the measured height of a rendered month, so the
+   it to ~0.25s. 225px is the measured height of a rendered month, so the
    scrollbar is right before anything is actually laid out. */
 .cd-month {
   content-visibility: auto;
-  contain-intrinsic-size: auto 210px;
+  contain-intrinsic-size: auto 225px;
 }
 
 .cd-month__title {
@@ -297,6 +297,13 @@
   font-variant-numeric: tabular-nums;
   border: 1.5px solid transparent;
   border-radius: 50%;
+}
+
+/* Inset from the cell so adjacent rings and X's don't touch. The <td> keeps
+   its full width -- only the marker shrinks -- so the grid stays aligned. */
+.cd-month .cd-day {
+  width: 82%;
+  margin: 0 auto;
 }
 
 .cd-day.is-out-of-span {

@@ -113,6 +113,8 @@
   var dateInput = document.getElementById('cd-date');
   var endInput = document.getElementById('cd-end');
   var endField = document.getElementById('cd-end-field');
+  var dateWord = document.getElementById('cd-date-word');
+  var dateHint = document.getElementById('cd-date-hint');
   var endAddBtn = document.getElementById('cd-end-add');
   var endRemoveBtn = document.getElementById('cd-end-remove');
   var copyBtn = document.getElementById('cd-copy');
@@ -553,12 +555,21 @@
 
   /* === Inputs ============================================================ */
 
+  // Keyed off the end field being visible, not state.end -- the field can be
+  // revealed with nothing in it yet, and "Date / End date" would read wrong.
+  function updateDateLabel() {
+    var paired = !endField.classList.contains('hidden');
+    dateWord.textContent = paired ? 'Start date' : 'Date';
+    dateHint.classList.toggle('hidden', paired);
+  }
+
   function syncInputs() {
     whatInput.value = state.what;
     dateInput.value = state.date ? toISO(state.date) : '';
     endInput.value = state.end ? toISO(state.end) : '';
     endField.classList.toggle('hidden', !state.end);
     endAddBtn.classList.toggle('hidden', !!state.end);
+    updateDateLabel();
   }
 
   // The label never affects the wall -- re-rendering 22k nodes per keystroke
@@ -576,6 +587,7 @@
       state.end = null;
       endField.classList.add('hidden');
       endAddBtn.classList.remove('hidden');
+      updateDateLabel();
     }
     update(true);
     syncURL();
@@ -591,6 +603,7 @@
   endAddBtn.addEventListener('click', function () {
     endField.classList.remove('hidden');
     endAddBtn.classList.add('hidden');
+    updateDateLabel();
     if (!endInput.value && state.date) {
       state.end = addDays(state.date, 7);
       endInput.value = toISO(state.end);
@@ -605,6 +618,7 @@
     endInput.value = '';
     endField.classList.add('hidden');
     endAddBtn.classList.remove('hidden');
+    updateDateLabel();
     update(true);
     syncURL();
     endAddBtn.focus();
