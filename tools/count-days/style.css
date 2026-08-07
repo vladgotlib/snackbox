@@ -156,11 +156,20 @@
   font-weight: 700;
 }
 
+/* Pieces separate by whitespace alone -- a wide column gap groups each fact,
+   and wrapping happens between facts, never inside one. */
 .cd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1.25rem;
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   margin-top: 0.15rem;
   font-variant-numeric: tabular-nums;
+}
+
+.cd-meta span {
+  white-space: nowrap;
 }
 
 .cd-message {

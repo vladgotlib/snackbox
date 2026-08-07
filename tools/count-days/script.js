@@ -201,9 +201,16 @@
     document.title = (text ? text + ' — ' : '') + 'Count Days — Snackbox';
   }
 
-  function setMeta(text) {
-    metaEl.textContent = text || '';
-    metaEl.classList.toggle('hidden', !text);
+  // Each piece becomes its own span -- the gap between them is the separator,
+  // and narrow screens wrap piece-by-piece instead of mid-fact.
+  function setMeta(pieces) {
+    metaEl.textContent = '';
+    (pieces || []).forEach(function (p) {
+      var s = document.createElement('span');
+      s.textContent = p;
+      metaEl.appendChild(s);
+    });
+    metaEl.classList.toggle('hidden', !pieces || !pieces.length);
   }
 
   function headlineFor(model) {
@@ -305,13 +312,13 @@
       if (model.startN !== model.endN) {
         pieces.push(fmtDate(model.startDate) + ' → ' + fmtDate(model.endDate, true));
         if (model.todayN >= model.startN && model.todayN <= model.endN) {
-          pieces.push('day ' + num(model.todayN - model.startN + 1) + ' of ' +
-            num(model.marked) + ' · ' + progressPct(model) + '% complete');
+          pieces.push('day ' + num(model.todayN - model.startN + 1) + ' of ' + num(model.marked));
+          pieces.push(progressPct(model) + '% complete');
         }
       }
     }
 
-    return pieces.join(' · ');
+    return pieces;
   }
 
   /* === Wall ==============================================================
@@ -462,7 +469,7 @@
     if (!model) {
       summaryEl.classList.add('hidden');
       emptyEl.classList.remove('hidden');
-      setMeta('');
+      setMeta(null);
       renderWall(null);
       document.title = 'Count Days — Snackbox';
       flushNotes();
