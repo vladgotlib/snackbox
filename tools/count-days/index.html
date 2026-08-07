@@ -27,8 +27,7 @@
       </div>
 
       <div class="cd-field">
-        <label for="cd-date"><span id="cd-date-word">Date</span>
-          <span class="cd-optional" id="cd-date-hint">(past or future)</span></label>
+        <label for="cd-date"><span id="cd-date-word">Date</span></label>
         <input type="date" id="cd-date">
       </div>
 
@@ -42,14 +41,15 @@
 
       <div class="cd-actions">
         <button type="button" class="cd-ghost-btn" id="cd-end-add">+ Add an end date</button>
-        <button type="button" class="cd-ghost-btn" id="cd-copy">Copy link</button>
       </div>
     </form>
 
-    <div class="cd-summary" id="cd-summary" aria-live="polite" aria-atomic="true">
-      <p class="cd-headline" id="cd-headline"></p>
-      <p class="cd-sub hidden" id="cd-sub"></p>
-      <div class="stats" id="cd-stats"></div>
+    <div class="cd-summary" id="cd-summary">
+      <div class="cd-summary__text" aria-live="polite" aria-atomic="true">
+        <p class="cd-headline" id="cd-headline"></p>
+        <p class="cd-meta hidden" id="cd-meta"></p>
+      </div>
+      <button type="button" class="cd-ghost-btn" id="cd-copy">Copy link</button>
     </div>
 
     <p class="cd-message hidden" id="cd-message" role="status"></p>

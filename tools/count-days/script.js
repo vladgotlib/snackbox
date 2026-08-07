@@ -114,14 +114,12 @@
   var endInput = document.getElementById('cd-end');
   var endField = document.getElementById('cd-end-field');
   var dateWord = document.getElementById('cd-date-word');
-  var dateHint = document.getElementById('cd-date-hint');
   var endAddBtn = document.getElementById('cd-end-add');
   var endRemoveBtn = document.getElementById('cd-end-remove');
   var copyBtn = document.getElementById('cd-copy');
   var summaryEl = document.getElementById('cd-summary');
   var headlineEl = document.getElementById('cd-headline');
-  var subEl = document.getElementById('cd-sub');
-  var statsEl = document.getElementById('cd-stats');
+  var metaEl = document.getElementById('cd-meta');
   var messageEl = document.getElementById('cd-message');
   var emptyEl = document.getElementById('cd-empty');
   var wallEl = document.getElementById('cd-wall');
@@ -203,16 +201,15 @@
     document.title = (text ? text + ' — ' : '') + 'Count Days — Snackbox';
   }
 
-  function setSub(text) {
-    subEl.textContent = text || '';
-    subEl.classList.toggle('hidden', !text);
+  function setMeta(text) {
+    metaEl.textContent = text || '';
+    metaEl.classList.toggle('hidden', !text);
   }
 
   function headlineFor(model) {
     var label = state.what;
 
     if (model.mode === 'today') {
-      setSub('');
       return label
         ? [{ b: 'Today' }, ' is ', label]
         : ['That date is ', { b: 'today' }, '.'];
@@ -220,7 +217,6 @@
 
     if (model.mode === 'countdown') {
       var togo = model.endN - model.todayN;
-      setSub('');
       if (togo === 1) return label ? [{ b: 'Tomorrow' }, ' — ', label] : [{ b: 'Tomorrow' }];
       return label
         ? [{ b: plural(togo, 'day') }, ' until ', label]
@@ -229,7 +225,6 @@
 
     if (model.mode === 'since') {
       var since = model.todayN - model.startN;
-      setSub('');
       if (since === 1) return label ? [{ b: 'Yesterday' }, ' — ', label] : [{ b: 'Yesterday' }];
       return label
         ? [{ b: plural(since, 'day') }, ' since ', label]
@@ -241,14 +236,12 @@
     var total = model.diff;
 
     if (model.startN === model.endN) {
-      setSub('');
       return label
         ? [label, ' is a ', { b: 'one-day' }, ' event on ', fmtDate(model.startDate)]
         : [{ b: 'A one-day' }, ' event on ', fmtDate(model.startDate)];
     }
 
     if (model.todayN < model.startN) {
-      setSub('');
       var until = { b: plural(model.startN - model.todayN, 'day') };
       return label
         ? [label, ' starts in ', until, ' and runs ', { b: plural(total, 'day') }]
@@ -256,7 +249,6 @@
     }
 
     if (model.todayN > model.endN) {
-      setSub('');
       var ago = { b: plural(model.todayN - model.endN, 'day') };
       return label
         ? [label, ' ended ', ago, ' ago — it ran ', { b: plural(total, 'day') }]
@@ -265,7 +257,6 @@
 
     var elapsed = model.todayN - model.startN;
     var remaining = model.endN - model.todayN;
-    setSub('Day ' + num(elapsed + 1) + ' of ' + num(model.marked) + ' · ' + progressPct(model) + '% complete');
 
     if (model.todayN === model.startN) {
       return label
@@ -291,51 +282,36 @@
     return pct;
   }
 
-  /* === Stats ============================================================= */
+  /* === Meta ==============================================================
+     One quiet line under the headline, carrying only what the headline does
+     NOT already say. Anything else was cut deliberately -- resist re-adding
+     tiles here. */
 
-  function stat(value, label, small) {
-    var box = document.createElement('div');
-    box.className = 'stat';
-    var v = document.createElement('span');
-    v.className = 'stat__value' + (small ? ' stat__value--sm' : '');
-    v.textContent = value;
-    var l = document.createElement('span');
-    l.className = 'stat__label';
-    l.textContent = label;
-    box.appendChild(v);
-    box.appendChild(l);
-    return box;
-  }
+  function metaFor(model) {
+    var pieces = [];
 
-  function renderStats(model) {
-    statsEl.textContent = '';
-    var tiles = [];
-
-    if (model.mode === 'countdown') {
-      var togo = model.endN - model.todayN;
-      tiles.push(stat(num(togo), 'Days to go'));
-      tiles.push(stat(fmtDate(model.endDate), 'Target date', true));
-      tiles.push(stat(num(countWeekdays(model.todayN + 1, model.endN)), 'Weekdays left'));
-      tiles.push(stat(num(model.marked), 'Days marked'));
+    if (model.mode === 'today') {
+      pieces.push(fmtDate(model.startDate, true));
+    } else if (model.mode === 'countdown') {
+      pieces.push(fmtDate(model.endDate, true));
+      pieces.push(plural(countWeekdays(model.todayN + 1, model.endN), 'weekday') + ' left');
     } else if (model.mode === 'since') {
-      tiles.push(stat(num(model.todayN - model.startN), 'Days since'));
-      tiles.push(stat(fmtDate(model.startDate, true), 'Start date', true));
-      tiles.push(stat(fmtYmd(ymd(model.startDate, model.endDate)), 'Calendar time', true));
-      tiles.push(stat(num(model.marked), 'Days marked'));
-    } else if (model.mode === 'today') {
-      tiles.push(stat('0', 'Days to go'));
-      tiles.push(stat(fmtDate(model.startDate), 'The date', true));
-      tiles.push(stat('1', 'Days marked'));
+      // Without a label the headline already names the start date.
+      if (state.what) pieces.push(fmtDate(model.startDate, true));
+      var parts = ymd(model.startDate, model.endDate);
+      // "20 d" alone would just repeat the headline's day count.
+      if (parts.y || parts.m) pieces.push(fmtYmd(parts));
     } else {
-      var total = model.diff;
-      var elapsed = Math.min(Math.max(model.todayN - model.startN, 0), total);
-      tiles.push(stat(num(elapsed), 'Elapsed'));
-      tiles.push(stat(num(total - elapsed), 'Remaining'));
-      tiles.push(stat(num(model.marked), 'Days marked'));
-      tiles.push(stat(progressPct(model) + '%', 'Progress'));
+      if (model.startN !== model.endN) {
+        pieces.push(fmtDate(model.startDate) + ' → ' + fmtDate(model.endDate, true));
+        if (model.todayN >= model.startN && model.todayN <= model.endN) {
+          pieces.push('day ' + num(model.todayN - model.startN + 1) + ' of ' +
+            num(model.marked) + ' · ' + progressPct(model) + '% complete');
+        }
+      }
     }
 
-    tiles.forEach(function (t) { statsEl.appendChild(t); });
+    return pieces.join(' · ');
   }
 
   /* === Wall ==============================================================
@@ -486,8 +462,7 @@
     if (!model) {
       summaryEl.classList.add('hidden');
       emptyEl.classList.remove('hidden');
-      setSub('');
-      statsEl.textContent = '';
+      setMeta('');
       renderWall(null);
       document.title = 'Count Days — Snackbox';
       flushNotes();
@@ -503,7 +478,7 @@
     }
 
     setHeadline(headlineFor(model));
-    renderStats(model);
+    setMeta(metaFor(model));
     if (rebuildWall) renderWall(model);
     flushNotes();
   }
@@ -515,7 +490,6 @@
   function updateDateLabel() {
     var paired = !endField.classList.contains('hidden');
     dateWord.textContent = paired ? 'Start date' : 'Date';
-    dateHint.classList.toggle('hidden', paired);
   }
 
   function syncInputs() {
