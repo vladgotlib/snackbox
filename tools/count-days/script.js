@@ -124,7 +124,6 @@
   var statsEl = document.getElementById('cd-stats');
   var messageEl = document.getElementById('cd-message');
   var emptyEl = document.getElementById('cd-empty');
-  var legendEl = document.getElementById('cd-legend');
   var wallEl = document.getElementById('cd-wall');
 
   var state = { what: '', date: null, end: null };
@@ -339,48 +338,6 @@
     tiles.forEach(function (t) { statsEl.appendChild(t); });
   }
 
-  /* === Legend ============================================================
-     Mode-dependent on purpose: countdown mode contains zero past days and
-     count-since contains zero future days, so a fixed legend would show a
-     swatch for a marker that appears nowhere on the page. */
-
-  function legendItem(cls, text) {
-    var item = document.createElement('span');
-    item.className = 'cd-legend__item';
-    var swatch = document.createElement('span');
-    swatch.className = 'cd-day ' + cls;
-    swatch.setAttribute('aria-hidden', 'true');
-    // The swatch is a shape sample, not a date -- but it still needs a line
-    // box, or it collapses to a different height than a real day cell.
-    swatch.textContent = '\u00A0';
-    var t = document.createElement('span');
-    t.textContent = text;
-    item.appendChild(swatch);
-    item.appendChild(t);
-    return item;
-  }
-
-  function renderLegend(model) {
-    legendEl.textContent = '';
-    var items = [];
-    if (model.mode === 'countdown') {
-      items.push(legendItem('is-future', 'day ahead'));
-      items.push(legendItem('is-anchor', 'target date'));
-    } else if (model.mode === 'since') {
-      items.push(legendItem('is-past', 'day elapsed'));
-      items.push(legendItem('is-anchor', 'the date'));
-    } else if (model.mode === 'today') {
-      items.push(legendItem('is-anchor', 'the date'));
-    } else {
-      if (model.todayN > model.startN) items.push(legendItem('is-past', 'elapsed'));
-      if (model.todayN < model.endN) items.push(legendItem('is-future', 'remaining'));
-      items.push(legendItem('is-anchor', 'start & end'));
-    }
-    items.push(legendItem('is-today', 'today'));
-    items.forEach(function (i) { legendEl.appendChild(i); });
-    legendEl.classList.remove('hidden');
-  }
-
   /* === Wall ==============================================================
      The wall is built as one HTML string and parsed in a single pass.
      Node-at-a-time construction cost ~1.8s for a lifetime-length span, which
@@ -444,8 +401,6 @@
   function renderWall(model) {
     if (!model) {
       wallEl.textContent = '';
-      legendEl.classList.add('hidden');
-      legendEl.textContent = '';
       return;
     }
 
@@ -465,8 +420,6 @@
       notes.push('Showing the first ' + num(shown) + ' months of ' + num(totalMonths) +
         '. The counts above cover the full span.');
     }
-
-    renderLegend(model);
   }
 
   /* === Messages ========================================================== */
