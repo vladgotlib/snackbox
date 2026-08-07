@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missing Flag — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="app-container">
+    <h1>Missing Flag</h1>
+    <p class="tagline">
+      Learn the flags of the world with the
+      <a href="https://kidsactivitiesblog.com/3490/what-is-missing/" target="_blank" rel="noopener">missing item</a>
+      method: memorize four flags, then name the one that goes missing.
+    </p>
+
+    <div class="scorebar">
+      <span class="score">Streak <b id="streak">0</b></span>
+      <span class="score">Best <b id="best">&mdash;</b></span>
+    </div>
+
+    <div class="stage">
+      <div class="countdown" aria-hidden="true"><i id="countdownBar"></i></div>
+
+      <div class="flag-grid" id="flagGrid"></div>
+
+      <div class="controls">
+        <div class="play-row" id="playRow">
+          <button type="button" id="playEasy">Easy</button>
+          <button type="button" id="playHard">Hard</button>
+          <p class="mode-hint">
+            <b>Easy:</b> the mystery flag stays visible &mdash; name it.<br>
+            <b>Hard:</b> the flag is hidden too &mdash; remember which one is gone.
+          </p>
+        </div>
+
+        <form class="guess-row" id="guessForm" autocomplete="off" hidden>
+          <label for="guessInput">Which country is missing?</label>
+          <div class="guess-controls">
+            <input id="guessInput" type="text" list="countryList"
+                   placeholder="Start typing a country&hellip;" spellcheck="false">
+            <button type="submit">Guess</button>
+          </div>
+        </form>
+        <datalist id="countryList"></datalist>
+
+        <p class="result" id="result" role="status" aria-live="polite" hidden></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
