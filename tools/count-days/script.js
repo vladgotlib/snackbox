@@ -350,7 +350,9 @@
     var swatch = document.createElement('span');
     swatch.className = 'cd-day ' + cls;
     swatch.setAttribute('aria-hidden', 'true');
-    swatch.textContent = '9';
+    // The swatch is a shape sample, not a date -- but it still needs a line
+    // box, or it collapses to a different height than a real day cell.
+    swatch.textContent = '\u00A0';
     var t = document.createElement('span');
     t.textContent = text;
     item.appendChild(swatch);
