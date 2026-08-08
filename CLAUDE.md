@@ -54,7 +54,7 @@ Hosted on Cloudflare Pages. Push to `main` triggers deploy. Build command: none.
 ## Conventions
 
 - Each item lives in its own subdirectory under its category (`games/`, `tools/`, `math/`)
-- Every subdirectory has its own `index.html`, `style.css`, and `script.js` — fully self-contained (exception: `math/visualizations/` is a single multi-page collection with its own internal navigation)
+- Every subdirectory has its own `index.html`, `style.css`, and `script.js` — fully self-contained
 - The front page (`index.html`) is a static listing organized into three sections: Games, Tools, Math
 - Keep things minimal. No unnecessary dependencies, libraries, or abstractions.
 - Shared styles (nav, layout, typography) go in `shared/style.css`
