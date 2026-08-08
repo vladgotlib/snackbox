@@ -1,6 +1,6 @@
 # Snackbox
 
-A lightweight collection of web games, small tools, and calculators. No frameworks, no build step — just static HTML, CSS, and JavaScript.
+A lightweight collection of web games, small tools, and math toys. No frameworks, no build step — just static HTML, CSS, and JavaScript.
 
 ## What's Inside
 
@@ -8,7 +8,7 @@ A lightweight collection of web games, small tools, and calculators. No framewor
 
 **Tools** — Small, single-purpose utilities for everyday tasks like text manipulation and estimation.
 
-**Calculators** — Fun and practical calculators for unit conversion, odds, and quick math.
+**Math** — Calculators and interactive visualizations: odds, fractals, chaos, and quick math.
 
 ## Run Locally
 
@@ -28,7 +28,7 @@ Then open `http://localhost:8000` (or whichever port your server uses).
 index.html          — Front page listing all items
 games/              — Browser games (each in its own subdirectory)
 tools/              — Small utilities
-calculators/        — Calculators
+math/               — Calculators and math visualizations
 shared/             — Shared CSS/JS (nav, theme, layout)
 ```
 

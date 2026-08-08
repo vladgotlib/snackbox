@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>chaos triangles</title>
+	<style>
+	body {
+		margin:0px;
+		font-family: monospace;
+	}
+	
+	#container {
+		max-width: 600px;
+		margin:30px auto;
+	}
+	
+	h2 a {
+		text-decoration:none;
+	}
+	
+	.slider-wrapper {
+	  display: inline-block;
+	  width: 600px;
+	 //height: 60px;
+	  padding: 0;
+	}
+	.slider-wrapper label {
+		//display: inline-block;
+	    transform: translateY(-6px) translateX(10px);
+		
+	}
+	.slider-wrapper input {
+	  width: 600px;
+	  height: 20px;
+	  margin: 0;
+	  //transform-origin: 75px 75px;
+	  //transform: rotate(-90deg);
+	}
+	#current_slider_value {
+		font-weight: bold;
+	}
+	#btn_autoplay {
+		//float: right;
+		margin-top: 10px;
+	}
+	.minmax_holder {
+		display: flex;
+		justify-content: space-between;
+	
+	}
+	
+	.minmax {
+		max-width: 55px;
+		border: 1px #eee solid;
+		text-align: center;
+	}
+	#current_slider_value {
+		//border: none;
+		font-weight: bold;
+	}
+	#input_max {
+	}
+	
+	
+	</style>
+  </head>
+  <body>
+  <div id="container">
+	  
+	<h2><a href="https://youtu.be/kbKtFN71Lfs" target="_blank"> Chaos triangles  </a></h2>
+	<button id="btn_random" type="button">fill randomly</button>
+	<button id="btn_iterative" type="button">fill iteratively</button>
+	<div id="canvas_holder">
+		<canvas id="myCanvas" width="700" height="700">your browser does not support the HTML5 canvas tag.</canvas>
+	</div>
+  </div>
+
+  <script type="text/javascript">
+	let running = false;
+	let timer = 0;
+	let triangle_endpoints = [
+		{x: .5,y: .02},
+		{x: .02,y: .98},
+		{x: .98,y: .98},
+	];
+	let currentPoint = {x:0, y:0};
+	
+	let btn_random =  document.querySelector("#btn_random");
+	let btn_iterative =  document.querySelector("#btn_iterative");
+	let c = document.getElementById("myCanvas");
+	let ctx = c.getContext("2d");
+	
+	
+	
+	btn_random.addEventListener('click',fill_triangles);
+	btn_iterative.addEventListener('click',fill_triangles);
+	
+	function fill_triangles(e) {
+		
+		init();
+		if (e.currentTarget.id == 'btn_random') {
+			running = true;
+			run();
+		} else {
+			running = false;
+			fillIteratively();
+		}
+
+	}
+
+	
+	function init() {
+		clearTimeout(timer);
+		running = false;
+		ctx.clearRect(0, 0, c.width, c.height);
+		ctx.fillStyle = '#000';
+		currentPoint.x = 300;
+		currentPoint.y = 300;
+	}
+	
+	function fillIteratively() {
+		let queue = [{depth:0, current_triangle: triangle_endpoints}];
+		ctx.fillStyle = '#000';
+		ctx.beginPath();
+		ctx.moveTo(c.width*triangle_endpoints[0].x, c.height*triangle_endpoints[0].y);
+		ctx.lineTo(c.width*triangle_endpoints[1].x, c.height*triangle_endpoints[1].y);
+		ctx.lineTo(c.width*triangle_endpoints[2].x, c.height*triangle_endpoints[2].y);
+		ctx.closePath();
+		ctx.fill();
+		
+		function fillIteratively_step(queue) {
+			if (queue.length && queue[0].depth<8) {
+				let current = queue.shift();
+				let midpoints = {
+					x1 : (current.current_triangle[0].x + current.current_triangle[1].x ) / 2,
+					y1 : (current.current_triangle[0].y + current.current_triangle[1].y ) / 2,
+					x2 : (current.current_triangle[1].x + current.current_triangle[2].x ) / 2,
+					y2 : (current.current_triangle[1].y + current.current_triangle[2].y ) / 2,
+					x3 : (current.current_triangle[2].x + current.current_triangle[0].x ) / 2,
+					y3 : (current.current_triangle[2].y + current.current_triangle[0].y ) / 2
+				}
+				
+				draw_current(midpoints);
+				
+				
+				queue.push({
+					depth:current.depth+1,
+					current_triangle: [
+						{x: current.current_triangle[0].x, y: current.current_triangle[0].y},
+						{x: midpoints.x1, y: midpoints.y1},
+						{x: midpoints.x3, y: midpoints.y3}					
+					]
+				});
+				
+				queue.push({
+					depth:current.depth+1,
+					current_triangle: [
+						{x: midpoints.x1, y: midpoints.y1},
+						{x: current.current_triangle[1].x, y: current.current_triangle[1].y},
+						{x: midpoints.x2, y: midpoints.y2}					
+					]
+				});
+				
+				
+				queue.push({
+					depth:current.depth+1,
+					current_triangle: [
+						{x: midpoints.x3, y: midpoints.y3},
+						{x: current.current_triangle[2].x, y: current.current_triangle[2].y},
+						{x: midpoints.x2, y: midpoints.y2}
+						
+					]
+				});			
+				
+			}
+			timer=setTimeout(function() {
+				fillIteratively_step(queue);
+				
+			},20);
+		}
+		fillIteratively_step(queue);
+	}
+	
+	function draw_current(endpoints) {
+		ctx.fillStyle = '#fff';
+		ctx.beginPath();
+		ctx.moveTo(c.width * endpoints.x1,c.height * endpoints.y1);
+		ctx.lineTo(c.width * endpoints.x2,c.height * endpoints.y2);
+		ctx.lineTo(c.width * endpoints.x3,c.height * endpoints.y3);
+		ctx.closePath();
+		ctx.fill();
+	}
+	
+  	function run() {
+		for (let i=0;i<100;i++) {
+			let newAttractor_idx = Math.floor(Math.random()*3);
+			let newAttractor = triangle_endpoints[newAttractor_idx];
+			currentPoint.x = (currentPoint.x + (c.width * newAttractor.x - currentPoint.x)/2);
+			currentPoint.y =  (currentPoint.y + (c.height *newAttractor.y - currentPoint.y)/2);	
+			ctx.fillStyle = '#000';
+			ctx.fillRect(currentPoint.x, currentPoint.y, 1, 1);
+		}
+		if (running ) window.requestAnimationFrame (run)
+	}
+
+  </script>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ternary diagram</title>
+	<style>
+	body {
+		margin:0px;
+		font-family: monospace;
+	}
+	
+	#container {
+		max-width: 600px;
+		margin:30px auto;
+	}
+	a {
+		text-decoration:none;
+	}
+	.inputs {
+		width: 60px;
+	}
+	
+	
+	
+	
+	</style>
+  </head>
+  <body>
+  <div id="container">
+	
+	<h2><a href="https://en.wikipedia.org/wiki/Ternary_plot" target="_blank">Ternary Diagram</a></h2>
+	Enter 3 numbers:
+	<input class="inputs" name="x" id="x" type="number" placeholder="x"/>
+	<input class="inputs" name="y" id="y" type="number" placeholder="y"/>
+	<input class="inputs" name="z" id="z" type="number" placeholder="z"/>
+	
+	<button id="btn_add">draw</button>
+	<div id="canvas_holder">
+		<canvas id="myCanvas" width="700" height="700">your browser does not support the HTML5 canvas tag.</canvas>
+	</div>
+  </div>
+
+  <script type="text/javascript">
+  	let triangle_endpoints = [
+		{x: .5, y: .2},
+		{x: 0.04966, y: .98},
+		{x: 1-.04966,y: .98},
+	];
+
+	
+	let c = document.getElementById("myCanvas");
+	let ctx = c.getContext("2d");
+	
+	let btn_add =  document.querySelector("#btn_add");
+	btn_add.addEventListener('click',main);
+	
+	function main(inputsPassed) {
+		let inputs = inputsPassed.type ? getInputs() : inputsPassed;
+		let percents = calculatePercentsFromInputs(inputs);
+		let finalCoordinates = getCoordinates(percents);
+		drawPoint(finalCoordinates);
+	
+	}
+	
+	function getInputs() {
+		let inputs = [...document.querySelectorAll(".inputs")].reduce((accumulator, current)=>{
+			accumulator[current.id] = current.value ? +current.value : 0;
+			return accumulator;
+		}, {});
+		return inputs;
+	}
+	
+	function calculatePercentsFromInputs(inputs) {
+		let sum = Object.values(inputs).reduce((sum, current) => sum + current,0);
+		if (sum > 0 && Math.min(...Object.values(inputs)) >= 0) {
+			Object.keys(inputs).forEach(x => inputs[x] = inputs[x]/sum);
+
+		} else {
+			inputs = {};
+		}
+		
+		return inputs;
+	}
+	
+	function getCoordinates(inputs) {
+		let coords = {};
+		triangle_height = triangle_endpoints[1].y - triangle_endpoints[0].y;
+		triangle_width = triangle_endpoints[2].x - triangle_endpoints[1].x;
+		console.table(inputs);
+		coords.y = triangle_height*(1-inputs.x) + triangle_endpoints[0].y;
+		coords.x = triangle_width * (((inputs.x*Math.sqrt(3)/2) + Math.sqrt(3)*inputs.y) /  Math.sqrt(3))+ triangle_endpoints[1].x;
+		coords.y *= c.height;
+		coords.x *= c.width;
+		
+		
+		return coords;
+	}
+	
+	function drawBoundary() {
+		ctx.fillStyle = '#fff';
+		ctx.lineWidth = 8;
+		ctx.beginPath();
+		ctx.moveTo(c.width*triangle_endpoints[0].x, c.height*triangle_endpoints[0].y);
+		ctx.lineTo(c.width*triangle_endpoints[1].x, c.height*triangle_endpoints[1].y);
+		ctx.lineTo(c.width*triangle_endpoints[2].x, c.height*triangle_endpoints[2].y);
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.lineWidth = .2;
+				
+		ctx.moveTo(c.width*triangle_endpoints[0].x, c.height*triangle_endpoints[0].y);
+		ctx.lineTo(c.width*midpointXY(triangle_endpoints[1],triangle_endpoints[2]).x, c.height*midpointXY(triangle_endpoints[1],triangle_endpoints[2]).y);
+		ctx.stroke();
+		
+		ctx.moveTo(c.width*triangle_endpoints[1].x, c.height*triangle_endpoints[1].y);
+		ctx.lineTo(c.width*midpointXY(triangle_endpoints[0],triangle_endpoints[2]).x, c.height*midpointXY(triangle_endpoints[0],triangle_endpoints[2]).y);
+		ctx.stroke();
+		
+		ctx.moveTo(c.width*triangle_endpoints[2].x, c.height*triangle_endpoints[2].y);
+		ctx.lineTo(c.width*midpointXY(triangle_endpoints[1],triangle_endpoints[0]).x, c.height*midpointXY(triangle_endpoints[1],triangle_endpoints[0]).y);
+		ctx.stroke();
+		
+		function midpointXY (o1,o2) {
+			return {
+				x: (o1.x + o2.x)/2,
+				y: (o1.y + o2.y)/2
+			}
+		}
+	}
+	
+	function drawPoint(coords) {
+
+		ctx.fillStyle = '#f0f';
+		ctx.beginPath();
+		//ctx.moveTo(50, 50);
+		ctx.arc(coords.x, coords.y, 4, 0, 2*Math.PI);
+		ctx.fill();
+	}
+	
+	drawBoundary();
+	
+	function drawEndpoints() {
+		for (let x = 0; x<2; x++) {
+			for (let y = 0; y<2; y++) {
+				for (let z = 0; z<2; z++) {
+					main({x,y,z});
+				}
+			}
+		}
+	
+	}
+	
+	//drawEndpoints();
+  </script>
+  </body>
+</html>

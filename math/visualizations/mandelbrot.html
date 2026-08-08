@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>modulo multiplication</title>
+	<style>
+	body {
+		margin:0px;
+		font-family: monospace;
+	}
+	
+	#container {
+		max-width: 600px;
+		margin:30px auto;
+	}
+	
+	h2 a {
+		text-decoration:none;
+	}
+	
+	.slider-wrapper {
+	  display: inline-block;
+	  width: 600px;
+	 //height: 60px;
+	  padding: 0;
+	}
+	.slider-wrapper label {
+		//display: inline-block;
+	    transform: translateY(-6px) translateX(10px);
+		
+	}
+	.slider-wrapper input {
+	  width: 600px;
+	  height: 20px;
+	  margin: 0;
+	  //transform-origin: 75px 75px;
+	  //transform: rotate(-90deg);
+	}
+	#current_slider_value {
+		font-weight: bold;
+	}
+	#btn_autoplay {
+		//float: right;
+		margin-top: 10px;
+	}
+	.minmax_holder {
+		display: flex;
+		justify-content: space-between;
+	
+	}
+	
+	.minmax {
+		max-width: 55px;
+		border: 1px #eee solid;
+		text-align: center;
+	}
+	#current_slider_value {
+		//border: none;
+		font-weight: bold;
+	}
+	#input_max {
+	}
+	
+	
+	</style>
+  </head>
+  <body>
+  <div id="container">
+	  
+	<h2><a href="https://www.youtube.com/watch?v=qhbuKbxJsk8" target="_blank"> Modulo multiplication  </a></h2>
+	
+	<div class="slider-wrapper">
+		<label for="input_range">Set multiplier</label>
+		<input type="range" name= "input_range"  min="0" max="1000" value="250">
+	</div>
+	
+	<div class="minmax_holder">
+		<input class="minmax" id="input_min" type = "number" placeholder="min" value="2">
+		<input class="minmax" id="current_slider_value" type = "number">
+		<input class="minmax" id="input_max" type = "number" placeholder="max" value="10">
+	</div>
+	
+	<button id="btn_autoplay" type="button">play</button>
+	<br>
+	<input type="checkbox" id="cb_forever" >forever
+	<div id="svg_holder">
+		<svg id="svg" width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+
+		</svg>
+	</div>
+  </div>
+
+  <script type="text/javascript">
+	let slider = document.querySelector("[name=input_range]");
+	slider.addEventListener('input', changedSlider);
+	let current_slider_value = document.getElementById('current_slider_value');
+	current_slider_value.addEventListener('change', changeSliderValue);
+	let cb_playforever = document.getElementById('cb_forever');
+	let svg = document.getElementById('svg');
+	let path = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+	let btn_autoplay =  document.querySelector("#btn_autoplay");
+	btn_autoplay.addEventListener('click',autoplay);
+	document.querySelectorAll("#input_min, #input_max").forEach(input => input.addEventListener("change", minMaxChanged));
+	
+	path.style.stroke = "#000"; //Set stroke colour
+	path.style.strokeWidth = "0.2px";
+	path.style.fill= "transparent";
+	svg.appendChild(path);
+	
+	const PI = Math.PI;
+	const RADIUS = 300;
+	const NUM_POINTS = 200;
+	let cos = Math.cos;
+	let sin = Math.sin;
+	let svg_width = svg.width.baseVal.value;
+	let svg_height = svg.height.baseVal.value;
+	let currentRangeValue = 4;
+	let rangeMin = 2;
+	let rangeMax = 10;
+	let running = false;
+	
+	function autoplay(e) {
+		running = !running;
+		if (running) {
+			btn_autoplay.innerHTML = 'stop';
+			if (cb_playforever.checked) {
+				runforever();
+			} else {
+				run();
+			}
+		} else {
+			btn_autoplay.innerHTML = 'play';
+		}
+	}
+	
+	function minMaxChanged(e) {
+		if(e.target.id == 'input_min') {
+			//slider.setAttribute("min", e.target.value); 
+			rangeMin = +e.target.value;
+		} else {
+			//slider.setAttribute("max", e.target.value); 
+			rangeMax = +e.target.value;
+		}
+	}
+	
+	function changeSliderValue(e) {
+		//console.log('changeSliderValue', e.target.value);
+		let inverseRangeValue = convertSliderValues(e.target.value, -1);
+		slider.value = inverseRangeValue;
+		changedSlider({target: {value:inverseRangeValue}});
+	}
+	
+	function changedSlider(e) {
+		//console.log('changedSlider', e.target.value)
+		currentRangeValue = (+e.target.value);
+		let power = convertSliderValues(currentRangeValue, 1);
+		let powerString = power.toFixed(2);
+
+		current_slider_value.value = powerString;
+		let p = "";
+		
+		for (let i = 1; i< NUM_POINTS; i+=1) {
+			let x0 = -RADIUS * cos(i/NUM_POINTS * 2*PI);
+			let y0 = RADIUS * sin(i/NUM_POINTS * 2*PI);
+			let x1 = -RADIUS * cos(power*i/NUM_POINTS * 2* PI);
+			let y1 = RADIUS * sin(power*i/NUM_POINTS * 2 * PI);
+			p += "M " + (svg_width/2+x0) + " " + (svg_height/2+y0) + " ";
+			p += "L " + (svg_width/2+x1) + " " + (svg_height/2+y1) + " ";
+			
+		}
+		p += "z";
+		path.setAttribute("d",p);
+		
+	}
+
+	function convertSliderValues(numberToConvert, direction) {
+		if (direction === 1) {
+			return Math.floor(100*(rangeMin+(rangeMax-rangeMin)*(+numberToConvert)/1000))/100;
+		} else {
+			return (1000/(rangeMax-rangeMin)) * (+numberToConvert - rangeMin);
+		}
+	}
+	
+	changedSlider({target: {value:250}});
+	
+	function run() {
+		slider.value = currentRangeValue;
+		changedSlider({target: {value:currentRangeValue}});
+		currentRangeValue += 1;
+		if (running && currentRangeValue <= 1000) window.requestAnimationFrame (run)
+	}
+	
+	function runforever() {
+		slider.value = currentRangeValue;
+		changedSlider({target: {value:currentRangeValue}});
+		currentRangeValue += 1;
+		if (running ) window.requestAnimationFrame (runforever)
+	}
+	
+	
+	//run();
+	
+	
+  </script>
+  </body>
+</html>

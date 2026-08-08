@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Snackbox is a lightweight collection of web games, small tools, and calculators. No frameworks, no build step — just static HTML, CSS, and JavaScript served via Cloudflare Pages.
+Snackbox is a lightweight collection of web games, small tools, and math toys (calculators and visualizations). No frameworks, no build step — just static HTML, CSS, and JavaScript served via Cloudflare Pages.
 
 ## Tech Stack
 
@@ -26,13 +26,14 @@ tools/              — Small utilities (each in its own subdirectory)
     index.html
     style.css
     script.js
-calculators/        — Calculators (each in its own subdirectory)
-  calc-name/
+math/               — Calculators and math visualizations (each in its own subdirectory)
+  item-name/
     index.html
     style.css
     script.js
 shared/             — Shared CSS/JS (e.g. common styles, nav)
   style.css
+_redirects          — Cloudflare Pages redirects (e.g. old /calculators/ URLs → /math/)
 ```
 
 ## Development
@@ -52,8 +53,8 @@ Hosted on Cloudflare Pages. Push to `main` triggers deploy. Build command: none.
 
 ## Conventions
 
-- Each item lives in its own subdirectory under its category (`games/`, `tools/`, `calculators/`)
-- Every subdirectory has its own `index.html`, `style.css`, and `script.js` — fully self-contained
-- The front page (`index.html`) is a static listing organized into three sections: Games, Tools, Calculators
+- Each item lives in its own subdirectory under its category (`games/`, `tools/`, `math/`)
+- Every subdirectory has its own `index.html`, `style.css`, and `script.js` — fully self-contained (exception: `math/visualizations/` is a single multi-page collection with its own internal navigation)
+- The front page (`index.html`) is a static listing organized into three sections: Games, Tools, Math
 - Keep things minimal. No unnecessary dependencies, libraries, or abstractions.
 - Shared styles (nav, layout, typography) go in `shared/style.css`
