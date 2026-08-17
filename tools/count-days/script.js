@@ -597,6 +597,12 @@
   /* === Boot ============================================================== */
 
   readParams();
+  // Opened from a shared link -> display mode: the calendar is the point,
+  // not the form. The "create your own" link reloads the page bare.
+  if (state.date) {
+    document.body.classList.add('cd-view');
+    document.getElementById('cd-view-link').classList.remove('hidden');
+  }
   syncInputs();
   update(true);
   if (location.search) writeURL();   // migrate legacy params to the new form
