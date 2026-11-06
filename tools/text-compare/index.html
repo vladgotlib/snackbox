@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Privacy: this policy blocks every outgoing network request (fetch, images, fonts, beacons). The page can only load its own
+       code from this site (this folder plus Snackbox's shared theme files) and run the inline theme snippet. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Text Compare — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="wrap">
+    <header class="top">
+      <div>
+        <h1>Text Compare</h1>
+        <p class="sub">Paste two versions of your writing and see exactly what changed.</p>
+      </div>
+      <details class="privacy">
+        <summary>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          Private: nothing leaves this page
+        </summary>
+        <div class="pop">
+          <p><strong>Runs 100% in your browser.</strong> There is no server. The comparison happens on your own computer.</p>
+          <p>A built-in security policy blocks every network connection from this page, so the text physically cannot be sent anywhere, even by accident.</p>
+          <p>Nothing is saved. Closing or reloading the tab erases everything.</p>
+          <p>Browser spellcheck and grammar extensions (like Grammarly) are switched off in the text boxes, since some of them send text to the cloud.</p>
+        </div>
+      </details>
+    </header>
+
+    <section class="inputs" id="inputs" aria-label="Texts to compare">
+      <div class="pane" id="paneA">
+        <div class="pane-head">
+          <label for="textA"><span class="dot a"></span>Original</label>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" data-open="A" title="Open a .txt, .md or .docx file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Open file</button>
+          <button class="btn ghost" type="button" data-clear="A">Clear</button>
+        </div>
+        <textarea id="textA" placeholder="Paste the original text here, or drop a .txt / .docx file" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lt-active="false"></textarea>
+        <div class="count" id="countA">Empty</div>
+      </div>
+      <div class="swapcol">
+        <button class="btn round" type="button" id="swap" title="Swap original and revised" aria-label="Swap original and revised">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg>
+        </button>
+      </div>
+      <div class="pane" id="paneB">
+        <div class="pane-head">
+          <label for="textB"><span class="dot b"></span>Revised</label>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" data-open="B" title="Open a .txt, .md or .docx file">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Open file</button>
+          <button class="btn ghost" type="button" data-clear="B">Clear</button>
+        </div>
+        <textarea id="textB" placeholder="Paste the revised text here, or drop a .txt / .docx file" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" data-gramm="false" data-gramm_editor="false" data-enable-grammarly="false" data-lt-active="false"></textarea>
+        <div class="count" id="countB">Empty</div>
+      </div>
+    </section>
+
+    <section class="options" aria-label="Comparison options">
+      <div>
+        <span class="optlbl">Compare by</span>
+        <div class="seg" id="modeSeg" role="group" aria-label="Compare by">
+          <button type="button" data-mode="word" aria-pressed="true" title="Best for most edits">Words</button>
+          <button type="button" data-mode="sent" aria-pressed="false" title="Highlights whole sentences that changed">Sentences</button>
+          <button type="button" data-mode="char" aria-pressed="false" title="Shows typo-level changes inside words">Characters</button>
+        </div>
+      </div>
+      <label class="chk"><input type="checkbox" id="optCase"> Ignore capitalization</label>
+      <label class="chk"><input type="checkbox" id="optSpace" checked> Ignore extra spaces and blank lines</label>
+      <label class="chk"><input type="checkbox" id="optQuotes" checked> Treat curly and straight quotes as the same</label>
+      <span class="grow"></span>
+      <button class="btn primary" type="button" id="compareBtn">Compare <kbd>Ctrl</kbd><kbd>Enter</kbd></button>
+    </section>
+
+    <section class="results" id="results" aria-label="Differences">
+      <div class="toolbar" id="toolbar" hidden>
+        <div class="seg" id="viewSeg" role="group" aria-label="View">
+          <button type="button" data-view="inline" aria-pressed="true">Inline</button>
+          <button type="button" data-view="side" aria-pressed="false">Side by side</button>
+          <button type="button" data-view="list" aria-pressed="false">List of changes</button>
+        </div>
+        <div class="stats" id="stats" aria-live="polite"></div>
+        <div class="jump">
+          <label class="chk" title="Collapse paragraphs that did not change"><input type="checkbox" id="hideSame"> Only changed parts</label>
+          <button class="btn round" type="button" id="prev" title="Previous change (P)" aria-label="Previous change">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg></button>
+          <span class="counter" id="counter"></span>
+          <button class="btn round" type="button" id="next" title="Next change (N)" aria-label="Next change">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+          <button class="btn ghost" type="button" id="toggleInputs" title="Give the results more room">Hide text boxes</button>
+          <button class="btn ghost" type="button" id="printBtn" title="Print or save as PDF">Print</button>
+        </div>
+      </div>
+      <div id="output"></div>
+    </section>
+  </div>
+
+  <input type="file" id="fileInput" accept=".txt,.md,.markdown,.text,.docx,text/plain" hidden>
+  <div class="toast" id="toast" role="status"></div>
+  <noscript><p style="padding:20px">This tool needs JavaScript enabled to run (it still works fully offline).</p></noscript>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
