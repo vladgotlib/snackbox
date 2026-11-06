@@ -439,10 +439,15 @@
   function parseWhen(){
     const m = /^(\d{1,2}):(\d{2})/.exec(whenEl.value || '');
     if(!m) return roundMin(Date.now());
-    const d = new Date(); d.setHours(+m[1], +m[2], 0, 0);
-    let t = d.getTime();
-    if(t > Date.now() + 60*MIN) t -= 24*HR;
-    return t;
+    // The input has no date: use whichever of yesterday, today or tomorrow puts it closest to now.
+    const now = Date.now();
+    let best = null;
+    for(const off of [-1, 0, 1]){
+      const d = new Date(now); d.setDate(d.getDate() + off); d.setHours(+m[1], +m[2], 0, 0);
+      const t = d.getTime();
+      if(best === null || Math.abs(t - now) < Math.abs(best - now)) best = t;
+    }
+    return best;
   }
   function renderTypes(){
     $('#types').innerHTML = Object.entries(TYPES).map(([k,v]) =>
