@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buzz Curve — Snackbox</title>
+  <script>
+    (function(){var t=localStorage.getItem('snackbox-theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)})();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../../shared/style.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="../../" class="nav__brand">Snackbox</a>
+    <span class="nav__spacer"></span>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
+  </nav>
+
+  <div class="wrap">
+    <div class="head">
+      <header class="top">
+        <div class="brand"><svg viewBox="0 0 30 20" aria-hidden="true"><path d="M2 18c5 0 6-15 11-15s7 11 15 15"/></svg><span>Buzz Curve</span></div>
+        <button class="me" id="meBtn" type="button" aria-expanded="false" aria-controls="settings"><span id="meSummary">180 lb · male · light snack</span><span class="edit">Edit</span></button>
+      </header>
+      <section id="settings" class="settings" hidden aria-label="About you">
+        <div class="set-row">
+          <label class="fld" for="lb"><span class="lbl">Body weight</span><span class="inline"><input id="lb" type="number" inputmode="numeric" min="80" max="400" step="1"><span class="unit">lb</span></span></label>
+          <div class="fld"><span class="lbl" id="sexLbl">Body</span><div class="seg" id="sexSeg" role="radiogroup" aria-labelledby="sexLbl"></div></div>
+          <div class="fld"><span class="lbl" id="foodLbl">Food in your stomach</span><div class="seg" id="foodSeg" role="radiogroup" aria-labelledby="foodLbl"></div></div>
+        </div>
+        <p class="hint">Weight and sex set how much body water dilutes each drink. Food slows absorption and lowers the peak.</p>
+      </section>
+    </div>
+
+    <div id="sampleBanner" class="sample" hidden>
+      <p>Example night: a 9 oz wine started 70 minutes ago and a beer started 30 minutes ago, each sipped over 20 minutes. Your first logged drink replaces it.</p>
+      <button id="clearSample" class="link" type="button">Clear example</button>
+    </div>
+
+    <section class="now" id="nowCard" data-level="0" aria-live="polite">
+      <div class="now-top">
+        <span class="clock" id="clock">--:--</span>
+        <span class="mode" id="mode">right now</span>
+        <span class="pill" id="trendPill" hidden>Rising</span>
+        <button class="link back" id="backNow" type="button" hidden>Back to now</button>
+      </div>
+      <h1 class="state" id="stateName">Sober</h1>
+      <p class="words" id="words">clear-headed, baseline</p>
+      <div class="bac-row"><span class="bac" id="bacVal">0.000<small>%</small></span><span class="bac-note" id="bacNote">estimated blood alcohol</span></div>
+      <p class="story" id="story"></p>
+      <p class="alert" id="alert" hidden><strong>Call 911</strong> if someone can't be woken, breathes slowly or irregularly, vomits while passed out, has a seizure, or has cold, clammy or bluish skin. Don't leave them to sleep it off alone, and keep them on their side.</p>
+      <dl class="body" id="bodyList" hidden></dl>
+    </section>
+
+    <section class="curve" aria-labelledby="curveH">
+      <div class="sec-head"><h2 id="curveH">Your curve</h2><span class="sub">Solid is so far, dotted is projected. Drag across it to check any time.</span></div>
+      <div id="chart" class="chart" tabindex="0" role="group" aria-label="Blood alcohol curve. Use left and right arrow keys to move through time."></div>
+      <ol class="miles" id="miles" aria-label="Milestones"></ol>
+    </section>
+
+    <section class="add" aria-labelledby="addH">
+      <h2 id="addH">Log a drink</h2>
+      <div class="types" id="types" role="radiogroup" aria-label="Drink type"></div>
+      <div class="row2">
+        <div class="fld size"><span class="lbl" id="sizeLbl">Size</span>
+          <div class="chips"><span class="chips" id="sizeChips"></span><span class="inline"><input id="oz" type="number" step="0.5" min="0.5" max="64" inputmode="decimal" aria-labelledby="sizeLbl"><span class="unit">oz</span></span></div>
+        </div>
+        <label class="fld" for="abv"><span class="lbl">Alcohol</span><span class="inline"><input id="abv" type="number" step="0.5" min="0.5" max="95" inputmode="decimal"><span class="unit">% ABV</span></span></label>
+      </div>
+      <div class="fld"><span class="lbl" id="whenLbl">First sip</span>
+        <div class="chips"><input id="when" type="time" aria-labelledby="whenLbl"><span class="chips" id="agoChips"></span></div>
+      </div>
+      <div class="fld"><span class="lbl" id="sipLbl">How long it took you</span>
+        <div class="chips" id="sipChips" role="radiogroup" aria-labelledby="sipLbl"></div>
+        <p class="hint">Still drinking it? Pick how long you expect it to last.</p>
+      </div>
+      <div class="add-row"><span class="std" id="stdPreview"></span><button class="primary" id="addBtn" type="button">Add wine</button></div>
+    </section>
+
+    <section class="log" aria-labelledby="logH">
+      <div class="sec-head"><h2 id="logH">Tonight</h2><span class="sub" id="totals"></span><button class="link" id="clearBtn" type="button">Clear night</button></div>
+      <ul class="drinks" id="drinkList"></ul>
+      <p class="empty" id="emptyLog" hidden>No drinks logged yet.</p>
+    </section>
+
+    <footer class="fine">
+      <p>The time you log is your first sip. Each drink is spread evenly over how long it took you, then absorbed gradually from the stomach.</p>
+      <p>These are estimates from the Widmark formula with an average liver clearance of 0.015% per hour. Real numbers swing 30% or more with genetics, medication, tolerance, sleep and how fast you drink. Never use this to decide whether you can drive.</p>
+      <p>One US standard drink is 14 g of alcohol: 12 oz beer at 5%, 5 oz wine at 12%, or 1.5 oz of 80-proof spirit. Your log stays on this device and resets 16 hours after your last drink.</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" hidden role="status"><span id="toastMsg"></span><button id="undoBtn" class="link" type="button">Undo</button></div>
+
+  <script src="../../shared/theme.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
