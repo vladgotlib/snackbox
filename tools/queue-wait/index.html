@@ -17,51 +17,62 @@
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#9790;</button>
   </nav>
 
-  <div class="app-container">
+  <div class="app-container qw">
     <h1>Queue Wait Estimator</h1>
 
-    <div class="input-group">
-      <label for="your-number">Your Number</label>
-      <input type="number" id="your-number" placeholder="e.g. 45" inputmode="numeric">
-    </div>
+    <button type="button" class="board" id="board">
+      <span class="board__label"><i></i>NOW SERVING</span>
+      <span class="flaps" id="flaps" aria-hidden="true"></span>
+      <span class="board__hint">tap the board if numbers jumped</span>
+    </button>
 
-    <div class="input-group">
-      <label for="now-serving">Now Serving</label>
-      <div class="input-row">
-        <input type="number" id="now-serving" placeholder="e.g. 32" inputmode="numeric">
-        <button id="add-btn">Add</button>
-      </div>
-    </div>
-
-    <div id="estimate" class="estimate hidden">
-      <div class="stats">
-        <div class="stat">
-          <span class="stat__value" id="wait-time">—</span>
-          <span class="stat__label">Est. Wait</span>
-        </div>
-        <div class="stat">
-          <span class="stat__value" id="call-time">—</span>
-          <span class="stat__label">Called At</span>
+    <div class="ticket" id="ticket">
+      <div class="ticket__top">
+        <button type="button" class="ticket__mine" id="your-num-btn" aria-label="Your number. Tap to change.">
+          <span class="lbl">Your number</span>
+          <span class="ticket__num"><small>#</small><span id="your-num">&mdash;</span></span>
+        </button>
+        <div class="ticket__eta">
+          <span class="shift" id="shift"></span>
+          <span class="lbl" id="countdown-label">Called in</span>
+          <span class="cd" id="countdown">--:--</span>
+          <span class="cd-sub" id="call-time" aria-live="polite">&nbsp;</span>
         </div>
       </div>
-      <div class="stats">
-        <div class="stat">
-          <span class="stat__value" id="ahead">—</span>
-          <span class="stat__label">Ahead of You</span>
-        </div>
-        <div class="stat">
-          <span class="stat__value" id="rate">—</span>
-          <span class="stat__label">Min / Number</span>
-        </div>
+      <div class="perf"></div>
+      <div class="stubs" id="stubs" aria-hidden="true"></div>
+      <div class="stubs-cap" id="stubs-caption" aria-live="polite">&nbsp;</div>
+      <div class="stamp" id="stamp" aria-hidden="true"></div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="side" id="undo-btn"><b>&#8630;</b>undo</button>
+      <button type="button" class="next" id="next-btn">NEXT<small>CALLED</small></button>
+      <button type="button" class="side" id="jump-btn"><b>#</b>jump</button>
+    </div>
+    <p class="caption">Tap <b>NEXT</b> every time the counter calls a number</p>
+
+    <div class="receipt">
+      <div class="receipt__head">*** QUEUE LOG ***</div>
+      <div class="receipt__hint">tap a line to void it</div>
+      <ol id="log"></ol>
+      <div class="receipt__foot" id="log-foot"></div>
+    </div>
+    <button type="button" class="new-ticket" id="new-ticket">New ticket</button>
+  </div>
+
+  <div class="sheet" id="sheet" hidden>
+    <form class="sheet__card" id="sheet-form" novalidate>
+      <div class="sheet__head">
+        <label class="sheet__title" id="sheet-title" for="sheet-input"></label>
+        <button type="button" class="sheet__cancel" id="sheet-cancel">Cancel</button>
       </div>
-    </div>
-
-    <div id="message" class="message">Log at least 2 observations to see an estimate.</div>
-
-    <div id="observations-section" class="observations-section hidden">
-      <h2>Observations</h2>
-      <ul id="observations-list" class="observations-list"></ul>
-    </div>
+      <div class="sheet__row">
+        <input id="sheet-input" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+        <button type="submit" class="sheet__ok">OK</button>
+      </div>
+      <p class="sheet__error" id="sheet-error" aria-live="polite"></p>
+    </form>
   </div>
 
   <script src="../../shared/theme.js"></script>
